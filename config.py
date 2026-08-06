@@ -53,6 +53,7 @@ class Config:
     SUPPORT_CHAT: str = field(default_factory=lambda: getenv("SUPPORT_CHAT", ""))
     SUPPORT_CHANNEL: str = field(default_factory=lambda: getenv("SUPPORT_CHANNEL", ""))
     START_IMG: str = field(default_factory=lambda: getenv("START_IMG", "https://raw.githubusercontent.com/SenpaiLabs/Word-Guess-Bot/main/.github/banner.png"))
+    PING_IMG: str = field(default_factory=lambda: getenv("PING_IMG", ""))
 
     def validate(self) -> None:
         required = {

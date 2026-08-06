@@ -16,9 +16,9 @@ from config import config
 
 @app.on_message(filters.command("stats"))
 async def stats_cmd(_, m: types.Message):
-    if config.START_IMG:
+    if config.PING_IMG:
         reply = await m.reply_photo(
-            photo=config.START_IMG,
+            photo=config.PING_IMG,
             caption="Fetching stats..."
         )
     else:
@@ -70,7 +70,7 @@ async def stats_cmd(_, m: types.Message):
     
     reply_markup = get_support_markup()
     
-    if config.START_IMG:
+    if config.PING_IMG:
         await reply.edit_caption(caption=text, reply_markup=reply_markup)
     else:
         await reply.edit_text(text=text, reply_markup=reply_markup)
