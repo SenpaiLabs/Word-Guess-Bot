@@ -10,6 +10,7 @@ from Senpai.helpers._admins import admin_filter
 from Senpai import app
 from Senpai.helpers._dataclass import Group, User
 from Senpai.helpers._utilities import build_mention, format_elapsed
+from Senpai.core.lang import get_string
 
 VALID_DIFFICULTIES = ("normal", "medium", "hard")
 
@@ -27,18 +28,15 @@ async def _start_game(m: types.Message, length: int | None) -> None:
     try:
         game = await engine.start_game(m.chat.id, m.from_user.id, length=length)
     except GameAlreadyRunning:
-        await m.reply_text(
-            "⚠️ A game is already running in this group.\n\n"
-            "Finish or end the current game before starting another one."
-        )
+        await m.reply_text(get_string("GAME_ALREADY_RUNNING"))
         return
     except NoWordsAvailable:
-        await m.reply_text("😕 No words are available for this mode right now. Try again shortly.")
+        await m.reply_text(get_string("NO_WORDS_AVAILABLE"))
         return
 
     text = render_board(game)
     if game.lucky_round:
-        text = "🍀 Lucky Round! All earned points are doubled!\n\n" + text
+        text = get_string("LUCKY_ROUND_BANNER") + "\n\n" + text
 
     sent = await m.reply_text(text)
     game.message_id = sent.id
@@ -69,30 +67,29 @@ async def new6(_, m: types.Message):
 async def end_game_cmd(_, m: types.Message):
     game = await db.get_active_game(m.chat.id)
     if not game:
-        await m.reply_text("No game is currently running in this group.")
+        await m.reply_text(get_string("END_GAME_NO_ACTIVE"))
         return
 
     await engine.end_game(game)
-    await m.reply_text(f"🛑 Game ended by admin.\n\nAnswer: **{game.word.upper()}**")
+    await m.reply_text(get_string("END_GAME_ENDED_BY_ADMIN").format(word=game.word.upper()))
 
 
 @app.on_message(filters.command("game") & filters.group)
 async def game_info(_, m: types.Message):
     game = await db.get_active_game(m.chat.id)
     if not game:
-        await m.reply_text("No game is currently running in this group. Use /new to start one.")
+        await m.reply_text(get_string("GAME_INFO_NO_ACTIVE"))
         return
 
     starter_map = await db.get_users_map([game.started_by])
     starter = starter_map.get(game.started_by)
     starter_name = build_mention(game.started_by, starter.first_name if starter else str(game.started_by))
-    text = (
-        f"🎮 <b>Game Info</b>\n\n"
-        f"Mode: {game.length}-Letter\n"
-        f"Attempts: {game.attempts}/30\n"
-        f"Started by: {starter_name}\n"
-        f"Elapsed: {format_elapsed(game.elapsed_seconds)}\n"
-        f"Difficulty: {game.difficulty.title()}"
+    text = get_string("GAME_INFO_TEXT").format(
+        length=game.length,
+        attempts=game.attempts,
+        starter=starter_name,
+        elapsed=format_elapsed(game.elapsed_seconds),
+        difficulty=game.difficulty.title(),
     )
     await m.reply_text(text, parse_mode=ParseMode.HTML)
 
@@ -100,9 +97,9 @@ async def game_info(_, m: types.Message):
 @app.on_message(filters.command("setmode") & filters.group & admin_filter)
 async def set_mode(_, m: types.Message):
     if len(m.command) < 2 or m.command[1].lower() not in VALID_DIFFICULTIES:
-        await m.reply_text("Usage: `/setmode normal|medium|hard`")
+        await m.reply_text(get_string("SETMODE_USAGE"))
         return
 
     difficulty = m.command[1].lower()
     await db.set_group_difficulty(m.chat.id, difficulty, title=m.chat.title or "")
-    await m.reply_text(f"✅ Difficulty set to **{difficulty.title()}** for future games in this group.")
+    await m.reply_text(get_string("SETMODE_SUCCESS").format(difficulty=difficulty.title()))

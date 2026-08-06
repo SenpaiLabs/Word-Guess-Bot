@@ -9,6 +9,7 @@ from Senpai.helpers._board import render_board, render_result
 from Senpai import app
 from Senpai.helpers._dataclass import User
 from Senpai.helpers import _stats as stats_service
+from Senpai.core.lang import get_string
 
 
 def _looks_like_guess(_, __, m: types.Message) -> bool:
@@ -49,7 +50,7 @@ async def handle_guess(_, m: types.Message):
         if won:
             breakdown = await stats_service.apply_win(game, m.from_user.id)
             board_text += "\n\n" + "\n".join(breakdown.as_lines())
-            board_text += f"\n\n**Total: +{breakdown.total} points**"
+            board_text += get_string("POINTS_TOTAL").format(total=breakdown.total)
         else:
             await stats_service.apply_loss(game)
 

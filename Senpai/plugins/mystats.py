@@ -7,24 +7,25 @@ from Senpai.core.mongo import db
 from Senpai import app
 from Senpai.helpers._dataclass import Statistics, User
 from Senpai.helpers._stats import GLOBAL_SCOPE
+from Senpai.core.lang import get_string
 
 
 def _format_block(stats: Statistics, heading: str) -> str:
-    fastest = f"{stats.fastest_solve}s" if stats.fastest_solve is not None else "—"
-    badges = " ".join(stats.badges) if stats.badges else "None yet"
-    return (
-        f"<b>{heading}</b>\n"
-        f"Games Played: {stats.games_played}\n"
-        f"Games Won: {stats.games_won}\n"
-        f"Games Lost: {stats.games_lost}\n"
-        f"Total Points: {stats.total_points}\n"
-        f"Current Streak: {stats.current_streak}\n"
-        f"Highest Streak: {stats.highest_streak}\n"
-        f"Fastest Solve: {fastest}\n"
-        f"Perfect Guesses: {stats.perfect_guesses}\n"
-        f"Total Guesses: {stats.total_guesses}\n"
-        f"Average Attempts: {stats.average_attempts}\n"
-        f"Badges: {badges}"
+    fastest = f"{stats.fastest_solve}s" if stats.fastest_solve is not None else get_string("MYSTATS_FASTEST_NONE")
+    badges = " ".join(stats.badges) if stats.badges else get_string("MYSTATS_BADGES_NONE")
+    return get_string("MYSTATS_BLOCK").format(
+        heading=heading,
+        games_played=stats.games_played,
+        games_won=stats.games_won,
+        games_lost=stats.games_lost,
+        total_points=stats.total_points,
+        current_streak=stats.current_streak,
+        highest_streak=stats.highest_streak,
+        fastest_solve=fastest,
+        perfect_guesses=stats.perfect_guesses,
+        total_guesses=stats.total_guesses,
+        average_attempts=stats.average_attempts,
+        badges=badges,
     )
 
 
@@ -40,9 +41,10 @@ async def my_stats(_, m: types.Message):
 
     if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
         group_stats = await db.get_statistics(user_id, m.chat.id)
-        sections.append(_format_block(group_stats, f"📊 Stats in {m.chat.title}"))
+        heading = get_string("MYSTATS_GROUP_HEADING").format(chat_title=m.chat.title)
+        sections.append(_format_block(group_stats, heading))
 
     global_stats = await db.get_statistics(user_id, GLOBAL_SCOPE)
-    sections.append(_format_block(global_stats, "🌍 Global Stats"))
+    sections.append(_format_block(global_stats, get_string("MYSTATS_GLOBAL_HEADING")))
 
     await m.reply_text("\n\n".join(sections), parse_mode=ParseMode.HTML)

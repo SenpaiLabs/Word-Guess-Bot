@@ -8,6 +8,7 @@ from Senpai import app
 from Senpai.helpers._badges import TOP_PLAYER_BADGE
 from Senpai.helpers._stats import GLOBAL_SCOPE
 from Senpai.helpers._utilities import build_mention
+from Senpai.core.lang import get_string
 
 RANK_EMOJI = {1: "🥇", 2: "🥈", 3: "🥉"}
 
@@ -19,7 +20,7 @@ def _rank_prefix(pos: int) -> str:
 async def _render_leaderboard(chat_id: int, title: str) -> str:
     top = await db.top_statistics(chat_id, limit=10)
     if not top:
-        return f"{title}\n\nNo games have been played yet."
+        return get_string("LEADERBOARD_NO_GAMES").format(title=title)
 
     users = await db.get_users_map([s.user_id for s in top])
 
@@ -42,11 +43,13 @@ async def _render_leaderboard(chat_id: int, title: str) -> str:
 
 @app.on_message(filters.command("leaderboard") & filters.group)
 async def group_leaderboard(_, m: types.Message):
-    text = await _render_leaderboard(m.chat.id, f"🏆 <b>Leaderboard — {m.chat.title}</b>")
+    title = get_string("LEADERBOARD_GROUP_TITLE").format(chat_title=m.chat.title)
+    text = await _render_leaderboard(m.chat.id, title)
     await m.reply_text(text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
 @app.on_message(filters.command("gleaderboard"))
 async def global_leaderboard(_, m: types.Message):
-    text = await _render_leaderboard(GLOBAL_SCOPE, "🌍 <b>Global Leaderboard</b>")
+    title = get_string("LEADERBOARD_GLOBAL_TITLE")
+    text = await _render_leaderboard(GLOBAL_SCOPE, title)
     await m.reply_text(text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)

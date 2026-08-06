@@ -6,22 +6,28 @@ from __future__ import annotations
 
 from config import config
 from Senpai.helpers._dataclass import Game
+from Senpai.core.lang import get_string
 
 MODE_EMOJI = {4: "🍷", 5: "🍇", 6: "🍉"}
 
 
 def render_board(game: Game) -> str:
     emoji = MODE_EMOJI.get(game.length, "🎯")
-    header = f"{emoji} ⌞ {game.length}-L Mode ⌝ 〢{game.attempts}/{config.MAX_ATTEMPTS}"
+    header = get_string("BOARD_HEADER").format(
+        emoji=emoji,
+        length=game.length,
+        attempts=game.attempts,
+        max_attempts=config.MAX_ATTEMPTS,
+    )
 
     lines = [header, ""]
     for g in game.guesses:
-        lines.append(f"{g.guess.upper()} → {g.pattern}")
+        lines.append(get_string("BOARD_GUESS_LINE").format(guess=g.guess.upper(), pattern=g.pattern))
 
     return "\n".join(lines)
 
 
 def render_result(game: Game, won: bool) -> str:
     if won:
-        return f"🎉 Solved in {game.attempts} attempts!\n\nAnswer: {game.word.upper()}"
-    return f"❌ Nobody guessed the word.\n\nAnswer:\n{game.word.upper()}"
+        return get_string("RESULT_WIN").format(attempts=game.attempts, word=game.word.upper())
+    return get_string("RESULT_LOSE").format(word=game.word.upper())

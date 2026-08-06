@@ -1,8 +1,34 @@
 {
-  "START_TEXT": "Hey! I'm Word Guess Bot. Add me to a group and use /wordguess to start a round.",
-  "GAME_ALREADY_RUNNING": "A game is already running in this chat.",
-  "NO_WORDS_AVAILABLE": "No words available for this difficulty right now.",
-  "ADMIN_ONLY": "Only group admins can use this command.",
-  "LEADERBOARD_TITLE": "🏆 Leaderboard",
-  "MY_STATS_TITLE": "📊 Your Stats"
+  "START_WELCOME": "👋 **Word Guess Bot**\n\nGuess the hidden word letter by letter — Wordle style, right inside your Telegram groups.\n\nAdd me to a group and try:\n/new — random length game\n/new4, /new5, /new6 — pick a specific length\n/game — see the current game's info\n/leaderboard — top players in this group\n/mystats — your personal stats",
+
+  "GAME_ALREADY_RUNNING": "⚠️ A game is already running in this group.\n\nFinish or end the current game before starting another one.",
+  "NO_WORDS_AVAILABLE": "😕 No words are available for this mode right now. Try again shortly.",
+  "LUCKY_ROUND_BANNER": "🍀 Lucky Round! All earned points are doubled!",
+
+  "END_GAME_NO_ACTIVE": "No game is currently running in this group.",
+  "END_GAME_ENDED_BY_ADMIN": "🛑 Game ended by admin.\n\nAnswer: **{word}**",
+
+  "GAME_INFO_NO_ACTIVE": "No game is currently running in this group. Use /new to start one.",
+  "GAME_INFO_TEXT": "🎮 <b>Game Info</b>\n\nMode: {length}-Letter\nAttempts: {attempts}/30\nStarted by: {starter}\nElapsed: {elapsed}\nDifficulty: {difficulty}",
+
+  "SETMODE_USAGE": "Usage: `/setmode normal|medium|hard`",
+  "SETMODE_SUCCESS": "✅ Difficulty set to **{difficulty}** for future games in this group.",
+
+  "LEADERBOARD_GROUP_TITLE": "🏆 <b>Leaderboard — {chat_title}</b>",
+  "LEADERBOARD_GLOBAL_TITLE": "🌍 <b>Global Leaderboard</b>",
+  "LEADERBOARD_NO_GAMES": "{title}\n\nNo games have been played yet.",
+
+  "MYSTATS_GROUP_HEADING": "📊 Stats in {chat_title}",
+  "MYSTATS_GLOBAL_HEADING": "🌍 Global Stats",
+  "MYSTATS_FASTEST_NONE": "—",
+  "MYSTATS_BADGES_NONE": "None yet",
+  "MYSTATS_BLOCK": "<b>{heading}</b>\nGames Played: {games_played}\nGames Won: {games_won}\nGames Lost: {games_lost}\nTotal Points: {total_points}\nCurrent Streak: {current_streak}\nHighest Streak: {highest_streak}\nFastest Solve: {fastest_solve}\nPerfect Guesses: {perfect_guesses}\nTotal Guesses: {total_guesses}\nAverage Attempts: {average_attempts}\nBadges: {badges}",
+
+  "BOARD_HEADER": "{emoji} ⌞ {length}-L Mode ⌝ 〢{attempts}/{max_attempts}",
+  "BOARD_GUESS_LINE": "{guess} → {pattern}",
+
+  "RESULT_WIN": "🎉 Solved in {attempts} attempts!\n\nAnswer: {word}",
+  "RESULT_LOSE": "❌ Nobody guessed the word.\n\nAnswer:\n{word}",
+
+  "POINTS_TOTAL": "\n\n**Total: +{total} points**"
 }
