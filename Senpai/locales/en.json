@@ -1,5 +1,5 @@
 {
-  "START_WELCOME": "👋 **Word Guess Bot**\n\nGuess the hidden word letter by letter — Wordle style, right inside your Telegram groups.\n\nAdd me to a group and try:\n/new — random length game\n/new4, /new5, /new6 — pick a specific length\n/game — see the current game's info\n/leaderboard — top players in this group\n/mystats — your personal stats",
+  "START_WELCOME": "👋 **Senpai**\n\nGuess the hidden word letter by letter — Wordle style, right inside your Telegram groups.\n\nAdd me to a group and try:\n/new — random length game\n/new4, /new5, /new6 — pick a specific length\n/game — see the current game's info\n/leaderboard — top players in this group\n/mystats — your personal stats",
 
   "GAME_ALREADY_RUNNING": "⚠️ A game is already running in this group.\n\nFinish or end the current game before starting another one.",
   "NO_WORDS_AVAILABLE": "😕 No words are available for this mode right now. Try again shortly.",
