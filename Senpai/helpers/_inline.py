@@ -26,8 +26,8 @@ def start_pm_markup(bot_username: str) -> InlineKeyboardMarkup:
         buttons.append(row2)
         
     row3 = []
-    if getattr(config, "CHANNEL_LINK", ""):
-        row3.append(InlineKeyboardButton(get_string("btn_channel"), url=config.CHANNEL_LINK))
+    if getattr(config, "SUPPORT_CHANNEL", ""):
+        row3.append(InlineKeyboardButton(get_string("btn_channel"), url=config.SUPPORT_CHANNEL))
     row3.append(InlineKeyboardButton(get_string("btn_source"), url="https://github.com/SenpaiLabs/Word-Guess-Bot"))
     if row3:
         buttons.append(row3)
