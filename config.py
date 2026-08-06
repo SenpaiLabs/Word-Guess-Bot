@@ -51,6 +51,7 @@ class Config:
 
     LOG_LEVEL: str = field(default_factory=lambda: getenv("LOG_LEVEL", "INFO"))
     SUPPORT_CHAT: str = field(default_factory=lambda: getenv("SUPPORT_CHAT", ""))
+    START_IMG: str = field(default_factory=lambda: getenv("START_IMG", "https://raw.githubusercontent.com/SenpaiLabs/Word-Guess-Bot/main/.github/banner.png"))
 
     def validate(self) -> None:
         required = {
