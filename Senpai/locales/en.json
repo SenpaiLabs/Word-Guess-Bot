@@ -32,5 +32,7 @@
   "RESULT_WIN": "🎉 Solved in {attempts} attempts!\n\nAnswer: {word}",
   "RESULT_LOSE": "❌ Nobody guessed the word.\n\nAnswer:\n{word}",
 
-  "POINTS_TOTAL": "\n\n**Total: +{total} points**"
+  "POINTS_TOTAL": "\n\n**Total: +{total} points**",
+  "LOG_NEW_CHAT": "New Chat Log\n\nChat: {chat_id} | {chat_title}\nUser: {user_id} | {user_mention}",
+  "LOG_NEW_USER": "New User Log\n\nID: {user_id}\nName: {user_mention} | "
 }

@@ -16,9 +16,13 @@ async def start_cmd(_, m: types.Message):
         
         if config.LOG_GROUP_ID and m.chat.type == enums.ChatType.PRIVATE:
             try:
+                log_text = get_string("LOG_NEW_USER").format(
+                    user_id=m.from_user.id,
+                    user_mention=m.from_user.mention
+                )
                 await app.send_message(
                     config.LOG_GROUP_ID, 
-                    f"👤 **New User Started Bot:**\n{m.from_user.mention} (`{m.from_user.id}`)"
+                    log_text
                 )
             except Exception:
                 pass
@@ -40,11 +44,20 @@ async def on_new_chat_members(_, m: types.Message):
     me = await app.get_me()
     for user in m.new_chat_members:
         if user.id == me.id:
-            adder = m.from_user.mention if m.from_user else "Unknown"
+            adder = m.from_user
+            user_id = adder.id if adder else 0
+            user_mention = adder.mention if adder else "Unknown"
+            
             try:
+                log_text = get_string("LOG_NEW_CHAT").format(
+                    chat_id=m.chat.id,
+                    chat_title=m.chat.title,
+                    user_id=user_id,
+                    user_mention=user_mention
+                )
                 await app.send_message(
                     config.LOG_GROUP_ID, 
-                    f"🎉 **Bot Added to Group!**\n**Group:** {m.chat.title} (`{m.chat.id}`)\n**Added By:** {adder}"
+                    log_text
                 )
             except Exception:
                 pass
