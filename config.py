@@ -49,7 +49,7 @@ class Config:
     WORD_GEN_BATCH_SIZE: int = field(default_factory=lambda: _int("WORD_GEN_BATCH_SIZE", 25))
 
 
-    LOG_LEVEL: str = field(default_factory=lambda: getenv("LOG_LEVEL", "INFO"))
+    LOG_GROUP_ID: int = field(default_factory=lambda: _int("LOG_GROUP_ID", 0))
     SUPPORT_CHAT: str = field(default_factory=lambda: getenv("SUPPORT_CHAT", ""))
     START_IMG: str = field(default_factory=lambda: getenv("START_IMG", "https://raw.githubusercontent.com/SenpaiLabs/Word-Guess-Bot/main/.github/banner.png"))
 
@@ -70,7 +70,7 @@ config = Config()
 
 def setup_logging() -> logging.Logger:
     logging.basicConfig(
-        level=getattr(logging, config.LOG_LEVEL.upper(), logging.INFO),
+        level=logging.INFO,
         format="[%(asctime)s - %(levelname)s] - %(name)s: %(message)s",
         datefmt="%d-%b-%y %H:%M:%S",
         handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
