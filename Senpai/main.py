@@ -30,7 +30,7 @@ async def main() -> None:
     scheduler.start()
 
     me = await app.get_me()
-    logger.info(f"Word Guess Bot started as @{me.username}")
+    logger.info(f"Senpai started as @{me.username}")
 
     stop_event = asyncio.Event()
     loop = asyncio.get_running_loop()
