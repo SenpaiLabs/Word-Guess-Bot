@@ -59,7 +59,7 @@ async def ping_cmd(_, m: types.Message):
     ram = psutil.virtual_memory().percent
     disk = psutil.disk_usage("/").percent
     
-    text = get_string("PING_TEXT").format(
+    text = get_string("ping_text").format(
         latency=latency,
         uptime=uptime,
         cpu=cpu,

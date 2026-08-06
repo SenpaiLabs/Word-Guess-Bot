@@ -16,7 +16,7 @@ async def start_cmd(_, m: types.Message):
         
         if config.LOG_GROUP_ID and m.chat.type == enums.ChatType.PRIVATE:
             try:
-                log_text = get_string("LOG_NEW_USER").format(
+                log_text = get_string("log_new_user").format(
                     user_id=m.from_user.id,
                     user_mention=m.from_user.mention
                 )
@@ -30,10 +30,10 @@ async def start_cmd(_, m: types.Message):
     if config.START_IMG:
         await m.reply_photo(
             photo=config.START_IMG,
-            caption=get_string("START_WELCOME")
+            caption=get_string("start_welcome")
         )
     else:
-        await m.reply_text(get_string("START_WELCOME"))
+        await m.reply_text(get_string("start_welcome"))
 
 
 @app.on_message(filters.new_chat_members)
@@ -49,7 +49,7 @@ async def on_new_chat_members(_, m: types.Message):
             user_mention = adder.mention if adder else "Unknown"
             
             try:
-                log_text = get_string("LOG_NEW_CHAT").format(
+                log_text = get_string("log_new_chat").format(
                     chat_id=m.chat.id,
                     chat_title=m.chat.title,
                     user_id=user_id,

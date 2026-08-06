@@ -9,6 +9,6 @@ from Senpai.core.lang import get_string
 def get_support_markup() -> InlineKeyboardMarkup | None:
     if config.SUPPORT_CHAT:
         return InlineKeyboardMarkup([
-            [InlineKeyboardButton(get_string("SUPPORT_BUTTON"), url=config.SUPPORT_CHAT)]
+            [InlineKeyboardButton(get_string("support"), url=config.SUPPORT_CHAT)]
         ])
     return None

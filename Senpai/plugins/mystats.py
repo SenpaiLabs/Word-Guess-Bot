@@ -11,9 +11,9 @@ from Senpai.core.lang import get_string
 
 
 def _format_block(stats: Statistics, heading: str) -> str:
-    fastest = f"{stats.fastest_solve}s" if stats.fastest_solve is not None else get_string("MYSTATS_FASTEST_NONE")
-    badges = " ".join(stats.badges) if stats.badges else get_string("MYSTATS_BADGES_NONE")
-    return get_string("MYSTATS_BLOCK").format(
+    fastest = f"{stats.fastest_solve}s" if stats.fastest_solve is not None else get_string("mystats_fastest_none")
+    badges = " ".join(stats.badges) if stats.badges else get_string("mystats_badges_none")
+    return get_string("mystats_block").format(
         heading=heading,
         games_played=stats.games_played,
         games_won=stats.games_won,
@@ -41,10 +41,10 @@ async def my_stats(_, m: types.Message):
 
     if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
         group_stats = await db.get_statistics(user_id, m.chat.id)
-        heading = get_string("MYSTATS_GROUP_HEADING").format(chat_title=m.chat.title)
+        heading = get_string("mystats_group_heading").format(chat_title=m.chat.title)
         sections.append(_format_block(group_stats, heading))
 
     global_stats = await db.get_statistics(user_id, GLOBAL_SCOPE)
-    sections.append(_format_block(global_stats, get_string("MYSTATS_GLOBAL_HEADING")))
+    sections.append(_format_block(global_stats, get_string("mystats_global_heading")))
 
     await m.reply_text("\n\n".join(sections), parse_mode=ParseMode.HTML)
