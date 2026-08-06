@@ -4,6 +4,8 @@
   "GAME_ALREADY_RUNNING": "⚠️ A game is already running in this group.\n\nFinish or end the current game before starting another one.",
   "NO_WORDS_AVAILABLE": "😕 No words are available for this mode right now. Try again shortly.",
   "LUCKY_ROUND_BANNER": "🍀 Lucky Round! All earned points are doubled!",
+  "GUESS_ALREADY_GUESSED": "⚠️ **{guess}** has already been guessed!",
+  "GUESS_INVALID_WORD": "❌ **{guess}** is not a valid word!",
 
   "END_GAME_NO_ACTIVE": "No game is currently running in this group.",
   "END_GAME_ENDED_BY_ADMIN": "🛑 Game ended by admin.\n\nAnswer: **{word}**",

@@ -1,11 +1,3 @@
-"""
-Word Guess Bot - Statistics service
-
-Wires a finished Game into per-user Statistics documents. Two documents
-are kept per user: one scoped to the group (chat_id=<group>) and one
-GLOBAL aggregate (chat_id=0), so /leaderboard and /gleaderboard can each
-query a single collection without cross-group aggregation at read time.
-"""
 
 from __future__ import annotations
 
@@ -44,7 +36,6 @@ async def _bump_loss(stats: Statistics, attempts_by_this_user: int) -> Statistic
 
 
 async def apply_win(game: Game, winner_id: int) -> ScoreBreakdown:
-    """Called once the winning guess is confirmed. Persists both scopes."""
     group_stats = await db.get_statistics(winner_id, game.chat_id)
     daily_first_win = await db.claim_daily_first_win(winner_id)
 
@@ -69,10 +60,6 @@ async def apply_win(game: Game, winner_id: int) -> ScoreBreakdown:
 
 
 async def apply_loss(game: Game) -> None:
-    """
-    Nobody guessed the word — every participant (anyone who submitted at
-    least one guess) takes a loss and their streak resets.
-    """
     attempts_by_user: dict[int, int] = {}
     for g in game.guesses:
         attempts_by_user[g.user_id] = attempts_by_user.get(g.user_id, 0) + 1

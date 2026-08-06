@@ -1,6 +1,3 @@
-"""
-Renders the single, edited game message.
-"""
 
 from __future__ import annotations
 

@@ -1,9 +1,4 @@
-"""
-Word Guess Bot - Configuration
 
-All settings are loaded from environment variables (.env file).
-No secrets are hardcoded here — only sane defaults for non-sensitive values.
-"""
 
 from __future__ import annotations
 
@@ -32,28 +27,28 @@ def _float(key: str, default: float) -> float:
 
 @dataclass(frozen=True)
 class Config:
-    # --- Telegram ---
+
     API_ID: int = field(default_factory=lambda: _int("API_ID", 0))
     API_HASH: str = field(default_factory=lambda: getenv("API_HASH", ""))
     BOT_TOKEN: str = field(default_factory=lambda: getenv("BOT_TOKEN", ""))
     OWNER_ID: int = field(default_factory=lambda: _int("OWNER_ID", 0))
 
-    # --- Database ---
+
     MONGO_URL: str = field(default_factory=lambda: getenv("MONGO_URL", ""))
     MONGO_DB_NAME: str = field(default_factory=lambda: getenv("MONGO_DB_NAME", "WordGuessBot"))
 
-    # --- Game defaults ---
+
     MAX_ATTEMPTS: int = field(default_factory=lambda: _int("MAX_ATTEMPTS", 30))
     DEFAULT_DIFFICULTY: str = field(default_factory=lambda: getenv("DEFAULT_DIFFICULTY", "normal"))
-    LUCKY_ROUND_CHANCE: float = field(default_factory=lambda: _float("LUCKY_ROUND_CHANCE", 0.05))  # 1-in-20 default
+    LUCKY_ROUND_CHANCE: float = field(default_factory=lambda: _float("LUCKY_ROUND_CHANCE", 0.05))
 
-    # --- AI word generation (Groq) ---
+
     GROQ_API_KEY: str = field(default_factory=lambda: getenv("GROQ_API_KEY", ""))
     GROQ_MODEL: str = field(default_factory=lambda: getenv("GROQ_MODEL", "llama-3.3-70b-versatile"))
     GROQ_BASE_URL: str = field(default_factory=lambda: getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1"))
     WORD_GEN_BATCH_SIZE: int = field(default_factory=lambda: _int("WORD_GEN_BATCH_SIZE", 25))
 
-    # --- Misc ---
+
     LOG_LEVEL: str = field(default_factory=lambda: getenv("LOG_LEVEL", "INFO"))
     SUPPORT_CHAT: str = field(default_factory=lambda: getenv("SUPPORT_CHAT", ""))
 
@@ -79,7 +74,7 @@ def setup_logging() -> logging.Logger:
         datefmt="%d-%b-%y %H:%M:%S",
         handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
     )
-    # Quiet down noisy third-party loggers
+
     for noisy in ("pyrogram", "pymongo", "apscheduler"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     return logging.getLogger("word-guess-bot")

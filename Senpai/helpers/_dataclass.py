@@ -8,7 +8,7 @@ from time import time
 class Word:
     word: str
     length: int
-    difficulty: str = "normal"  # normal | medium | hard
+    difficulty: str = "normal"
     times_used: int = 0
     enabled: bool = True
 
@@ -35,7 +35,7 @@ class Word:
 @dataclass
 class GuessResult:
     guess: str
-    pattern: str  # e.g. "🟩🟨🟥🟥🟩"
+    pattern: str
     user_id: int
     timestamp: float = field(default_factory=time)
 
@@ -65,7 +65,7 @@ class Game:
     difficulty: str
     started_by: int
     message_id: int | None = None
-    status: str = "active"  # active | won | lost | ended
+    status: str = "active"
     guesses: list[GuessResult] = field(default_factory=list)
     started_at: float = field(default_factory=time)
     ended_at: float | None = None
@@ -153,7 +153,6 @@ class User:
 
 @dataclass
 class Statistics:
-    """One doc per (user_id, chat_id). chat_id = 0 is the GLOBAL scope."""
 
     user_id: int
     chat_id: int

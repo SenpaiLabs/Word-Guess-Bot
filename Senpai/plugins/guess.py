@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+
 from pyrogram import filters, types
 from pyrogram.errors import MessageIdInvalid, MessageNotModified
 
@@ -10,6 +12,14 @@ from Senpai import app
 from Senpai.helpers._dataclass import User
 from Senpai.helpers import _stats as stats_service
 from Senpai.core.lang import get_string
+
+
+async def delete_temp_message(message: types.Message, delay: int = 3):
+    await asyncio.sleep(delay)
+    try:
+        await message.delete()
+    except Exception:
+        pass
 
 
 def _looks_like_guess(_, __, m: types.Message) -> bool:
@@ -29,7 +39,27 @@ async def handle_guess(_, m: types.Message):
 
     guess = m.text.strip().lower()
     if not engine.is_guess_shape_valid(guess, game.length):
-        return  # silently ignore — not a guess for this game's word length
+        return
+
+    # Delete the user's guess message immediately
+    try:
+        await m.delete()
+    except Exception:
+        pass
+
+    # Check if already guessed
+    if any(g.guess == guess for g in game.guesses):
+        msg_text = get_string("GUESS_ALREADY_GUESSED").format(guess=guess.upper())
+        temp = await m.reply_text(msg_text)
+        asyncio.create_task(delete_temp_message(temp))
+        return
+
+    # Check if the word is valid (exists in dictionary)
+    if not await db.is_valid_word(guess):
+        msg_text = get_string("GUESS_INVALID_WORD").format(guess=guess.upper())
+        temp = await m.reply_text(msg_text)
+        asyncio.create_task(delete_temp_message(temp))
+        return
 
     if m.from_user:
         await db.register_user(
@@ -37,12 +67,6 @@ async def handle_guess(_, m: types.Message):
         )
 
     pattern, won, game_over = await engine.process_guess(game, guess, m.from_user.id if m.from_user else 0)
-
-    # Keep the chat clean — remove the raw guess message if we're allowed to.
-    try:
-        await m.delete()
-    except Exception:
-        pass
 
     board_text = render_board(game)
     if game_over:
@@ -54,18 +78,11 @@ async def handle_guess(_, m: types.Message):
         else:
             await stats_service.apply_loss(game)
 
-    if not game.message_id:
-        sent = await app.send_message(chat_id=m.chat.id, text=board_text)
-        game.message_id = sent.id
-        await db.save_game(game) if not game_over else await db.finish_game(game)
-        return
-
-    try:
-        await app.edit_message_text(chat_id=m.chat.id, message_id=game.message_id, text=board_text)
-    except (MessageIdInvalid, MessageNotModified):
-        pass
-    except Exception:
-        # message may have been deleted — resend as a fresh board
-        sent = await app.send_message(chat_id=m.chat.id, text=board_text)
-        game.message_id = sent.id
-        await db.save_game(game) if not game_over else await db.finish_game(game)
+    # Send the new board message
+    sent = await app.send_message(chat_id=m.chat.id, text=board_text)
+    game.message_id = sent.id
+    
+    if game_over:
+        await db.finish_game(game)
+    else:
+        await db.save_game(game)
