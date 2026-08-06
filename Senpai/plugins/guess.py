@@ -49,14 +49,14 @@ async def handle_guess(_, m: types.Message):
 
     # Check if already guessed
     if any(g.guess == guess for g in game.guesses):
-        msg_text = get_string("guess_already_guessed").format(guess=guess.upper())
+        msg_text = get_string(m.chat.id, "guess_already_guessed").format(guess=guess.upper())
         temp = await m.reply_text(msg_text)
         asyncio.create_task(delete_temp_message(temp))
         return
 
     # Check if the word is valid (exists in dictionary)
     if not await db.is_valid_word(guess):
-        msg_text = get_string("guess_invalid_word").format(guess=guess.upper())
+        msg_text = get_string(m.chat.id, "guess_invalid_word").format(guess=guess.upper())
         temp = await m.reply_text(msg_text)
         asyncio.create_task(delete_temp_message(temp))
         return
@@ -74,7 +74,7 @@ async def handle_guess(_, m: types.Message):
         if won:
             breakdown = await stats_service.apply_win(game, m.from_user.id)
             board_text += "\n\n" + "\n".join(breakdown.as_lines())
-            board_text += get_string("points_total").format(total=breakdown.total)
+            board_text += get_string(m.chat.id, "points_total").format(total=breakdown.total)
         else:
             await stats_service.apply_loss(game)
 

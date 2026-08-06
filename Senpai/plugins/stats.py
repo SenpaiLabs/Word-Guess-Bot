@@ -51,7 +51,7 @@ async def stats_cmd(_, m: types.Message):
     me = await app.get_me()
     bot_name = me.first_name
     
-    text = get_string("stats_text").format(
+    text = get_string(m.chat.id, "stats_text").format(
         bot_name=bot_name,
         sudos=sudos,
         chats=chats,
@@ -68,7 +68,7 @@ async def stats_cmd(_, m: types.Message):
         pyrogram_version=pyrogram_version
     )
     
-    reply_markup = get_support_markup()
+    reply_markup = get_support_markup(m.chat.id)
     
     if config.PING_IMG:
         await reply.edit_caption(caption=text, reply_markup=reply_markup)

@@ -28,15 +28,15 @@ async def _start_game(m: types.Message, length: int | None) -> None:
     try:
         game = await engine.start_game(m.chat.id, m.from_user.id, length=length)
     except GameAlreadyRunning:
-        await m.reply_text(get_string("game_already_running"))
+        await m.reply_text(get_string(m.chat.id, "game_already_running"))
         return
     except NoWordsAvailable:
-        await m.reply_text(get_string("no_words_available"))
+        await m.reply_text(get_string(m.chat.id, "no_words_available"))
         return
 
     text = render_board(game)
     if game.lucky_round:
-        text = get_string("lucky_round_banner") + "\n\n" + text
+        text = get_string(m.chat.id, "lucky_round_banner") + "\n\n" + text
 
     sent = await m.reply_text(text)
     game.message_id = sent.id
@@ -67,24 +67,24 @@ async def new6(_, m: types.Message):
 async def end_game_cmd(_, m: types.Message):
     game = await db.get_active_game(m.chat.id)
     if not game:
-        await m.reply_text(get_string("end_game_no_active"))
+        await m.reply_text(get_string(m.chat.id, "end_game_no_active"))
         return
 
     await engine.end_game(game)
-    await m.reply_text(get_string("end_game_ended_by_admin").format(word=game.word.upper()))
+    await m.reply_text(get_string(m.chat.id, "end_game_ended_by_admin").format(word=game.word.upper()))
 
 
 @app.on_message(filters.command("game") & filters.group)
 async def game_info(_, m: types.Message):
     game = await db.get_active_game(m.chat.id)
     if not game:
-        await m.reply_text(get_string("game_info_no_active"))
+        await m.reply_text(get_string(m.chat.id, "game_info_no_active"))
         return
 
     starter_map = await db.get_users_map([game.started_by])
     starter = starter_map.get(game.started_by)
     starter_name = build_mention(game.started_by, starter.first_name if starter else str(game.started_by))
-    text = get_string("game_info_text").format(
+    text = get_string(m.chat.id, "game_info_text").format(
         length=game.length,
         attempts=game.attempts,
         starter=starter_name,
@@ -97,9 +97,9 @@ async def game_info(_, m: types.Message):
 @app.on_message(filters.command("setmode") & filters.group & admin_filter)
 async def set_mode(_, m: types.Message):
     if len(m.command) < 2 or m.command[1].lower() not in VALID_DIFFICULTIES:
-        await m.reply_text(get_string("setmode_usage"))
+        await m.reply_text(get_string(m.chat.id, "setmode_usage"))
         return
 
     difficulty = m.command[1].lower()
     await db.set_group_difficulty(m.chat.id, difficulty, title=m.chat.title or "")
-    await m.reply_text(get_string("setmode_success").format(difficulty=difficulty.title()))
+    await m.reply_text(get_string(m.chat.id, "setmode_success").format(difficulty=difficulty.title()))

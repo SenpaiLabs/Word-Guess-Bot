@@ -59,7 +59,7 @@ async def ping_cmd(_, m: types.Message):
     ram = psutil.virtual_memory().percent
     disk = psutil.disk_usage("/").percent
     
-    text = get_string("ping_text").format(
+    text = get_string(m.chat.id, "ping_text").format(
         latency=latency,
         uptime=uptime,
         cpu=cpu,
@@ -67,7 +67,7 @@ async def ping_cmd(_, m: types.Message):
         disk=disk
     )
     
-    reply_markup = get_support_markup()
+    reply_markup = get_support_markup(m.chat.id)
     
     if config.PING_IMG:
         await reply.edit_caption(caption=text, reply_markup=reply_markup)

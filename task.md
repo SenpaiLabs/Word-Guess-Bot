@@ -1,0 +1,14 @@
+- `[/]` 1. Update Database (mongo.py)
+  - Add `get_chat_lang(chat_id, chat_type)`
+  - Add `set_chat_lang(chat_id, chat_type, lang)`
+- `[ ]` 2. Update Localization Files
+  - Add `"language_name": "English"` to `en.json`
+  - Add `"language_name": "हिन्दी (Hindi)"` to `hi.json`
+- `[ ]` 3. Contextual Language Architecture
+  - Implement Pyrogram middleware to fetch and inject language into context
+  - Update `Senpai/core/lang.py` to read language from context
+- `[ ]` 4. Language Plugin
+  - Create `Senpai/plugins/language.py`
+  - Implement dynamic inline keyboard generation from `Senpai/locales/`
+  - Handle `lang` callback (show language menu)
+  - Handle `setlang_{code}` callback (save and confirm)

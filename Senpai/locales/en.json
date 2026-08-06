@@ -1,4 +1,5 @@
 {
+  "language_name": "English",
   "start_pm": "👋 **Senpai**\n\nGuess the hidden word letter by letter — Wordle style, right inside your Telegram groups.\n\nAdd me to a group and try:\n/new — random length game\n/new4, /new5, /new6 — pick a specific length\n/game — see the current game's info\n/leaderboard — top players in this group\n/profile — your personal stats",
   "start_gc": "👋 **Senpai** is alive and ready to play!\n\nUse /new to start a game, or click the buttons below for more info.",
   "add_me": "Add me to Group",

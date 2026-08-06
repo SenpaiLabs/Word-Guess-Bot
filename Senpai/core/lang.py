@@ -7,6 +7,8 @@ from Senpai.core.dir import LOCALES_DIR
 from config import config
 
 
+chat_lang_cache: dict[int, str] = {}
+
 @lru_cache(maxsize=None)
 def load_locale(lang: str = None) -> dict:
     lang = lang or config.DEFAULT_LANG
@@ -16,6 +18,6 @@ def load_locale(lang: str = None) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def get_string(key: str, lang: str = None) -> str:
-    lang = lang or config.DEFAULT_LANG
+def get_string(chat_id: int, key: str) -> str:
+    lang = chat_lang_cache.get(chat_id, config.DEFAULT_LANG)
     return load_locale(lang).get(key, key)
