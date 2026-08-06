@@ -40,6 +40,7 @@ class Config:
 
     MAX_ATTEMPTS: int = field(default_factory=lambda: _int("MAX_ATTEMPTS", 30))
     DEFAULT_DIFFICULTY: str = field(default_factory=lambda: getenv("DEFAULT_DIFFICULTY", "normal"))
+    DEFAULT_LANG: str = field(default_factory=lambda: getenv("DEFAULT_LANG", "en"))
     LUCKY_ROUND_CHANCE: float = field(default_factory=lambda: _float("LUCKY_ROUND_CHANCE", 0.05))
 
 
