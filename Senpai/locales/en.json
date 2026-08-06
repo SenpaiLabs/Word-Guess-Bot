@@ -1,5 +1,11 @@
 {
-  "start_welcome": "👋 **Senpai**\n\nGuess the hidden word letter by letter — Wordle style, right inside your Telegram groups.\n\nAdd me to a group and try:\n/new — random length game\n/new4, /new5, /new6 — pick a specific length\n/game — see the current game's info\n/leaderboard — top players in this group\n/mystats — your personal stats",
+  "start_pm": "👋 **Senpai**\n\nGuess the hidden word letter by letter — Wordle style, right inside your Telegram groups.\n\nAdd me to a group and try:\n/new — random length game\n/new4, /new5, /new6 — pick a specific length\n/game — see the current game's info\n/leaderboard — top players in this group\n/userprofile — your personal stats",
+  "start_gc": "👋 **Senpai** is alive and ready to play!\n\nUse /new to start a game, or click the buttons below for more info.",
+  "btn_add_me": "Add me to Group",
+  "btn_help": "Help",
+  "btn_channel": "Channel",
+  "btn_source": "Source",
+  "btn_language": "Language",
   "game_already_running": "⚠️ A game is already running in this group.\n\nFinish or end the current game before starting another one.",
   "no_words_available": "😕 No words are available for this mode right now. Try again shortly.",
   "lucky_round_banner": "🍀 Lucky Round! All earned points are doubled!",

@@ -6,6 +6,7 @@ from Senpai.core.mongo import db
 from Senpai import app
 from Senpai.helpers._dataclass import User
 from Senpai.core.lang import get_string
+from Senpai.helpers._inline import start_pm_markup, start_gc_markup
 from config import config
 
 
@@ -27,13 +28,28 @@ async def start_cmd(_, m: types.Message):
             except Exception:
                 pass
 
+    me = await app.get_me()
+    
+    if m.chat.type == enums.ChatType.PRIVATE:
+        text = get_string("start_pm")
+        reply_markup = start_pm_markup(me.username)
+    else:
+        text = get_string("start_gc")
+        reply_markup = start_gc_markup()
+
     if config.START_IMG:
         await m.reply_photo(
             photo=config.START_IMG,
-            caption=get_string("start_welcome")
+            caption=text,
+            reply_markup=reply_markup
         )
     else:
-        await m.reply_text(get_string("start_welcome"))
+        await m.reply_text(text, reply_markup=reply_markup)
+
+
+@app.on_callback_query(filters.regex("^help$"))
+async def help_cb(_, query: types.CallbackQuery):
+    await query.answer("Help menu coming soon!", show_alert=True)
 
 
 @app.on_message(filters.new_chat_members)
