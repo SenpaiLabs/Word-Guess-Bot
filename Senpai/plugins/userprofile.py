@@ -11,9 +11,9 @@ from Senpai.core.lang import get_string
 
 
 def _format_block(stats: Statistics, heading: str) -> str:
-    fastest = f"{stats.fastest_solve}s" if stats.fastest_solve is not None else get_string("mystats_fastest_none")
-    badges = " ".join(stats.badges) if stats.badges else get_string("mystats_badges_none")
-    return get_string("mystats_block").format(
+    fastest = f"{stats.fastest_solve}s" if stats.fastest_solve is not None else get_string("userprofile_fastest_none")
+    badges = " ".join(stats.badges) if stats.badges else get_string("userprofile_badges_none")
+    return get_string("userprofile_block").format(
         heading=heading,
         games_played=stats.games_played,
         games_won=stats.games_won,
@@ -29,7 +29,7 @@ def _format_block(stats: Statistics, heading: str) -> str:
     )
 
 
-@app.on_message(filters.command("mystats"))
+@app.on_message(filters.command("userprofile"))
 async def my_stats(_, m: types.Message):
     if m.from_user:
         await db.register_user(
@@ -41,10 +41,10 @@ async def my_stats(_, m: types.Message):
 
     if m.chat.type in (ChatType.GROUP, ChatType.SUPERGROUP):
         group_stats = await db.get_statistics(user_id, m.chat.id)
-        heading = get_string("mystats_group_heading").format(chat_title=m.chat.title)
+        heading = get_string("userprofile_group_heading").format(chat_title=m.chat.title)
         sections.append(_format_block(group_stats, heading))
 
     global_stats = await db.get_statistics(user_id, GLOBAL_SCOPE)
-    sections.append(_format_block(global_stats, get_string("mystats_global_heading")))
+    sections.append(_format_block(global_stats, get_string("userprofile_global_heading")))
 
     await m.reply_text("\n\n".join(sections), parse_mode=ParseMode.HTML)
