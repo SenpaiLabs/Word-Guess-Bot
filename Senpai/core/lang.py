@@ -15,4 +15,8 @@ def load_locale(lang: str = "en") -> dict:
 
 
 def get_string(key: str, lang: str = "en") -> str:
-    return load_locale(lang).get(key, key)
+    if key == "SUPPORT_BUTTON":
+        lookup = "support"
+    else:
+        lookup = key.lower()
+    return load_locale(lang).get(lookup, key)

@@ -1,40 +1,31 @@
 {
-  "START_WELCOME": "👋 **Senpai**\n\nGuess the hidden word letter by letter — Wordle style, right inside your Telegram groups.\n\nAdd me to a group and try:\n/new — random length game\n/new4, /new5, /new6 — pick a specific length\n/game — see the current game's info\n/leaderboard — top players in this group\n/mystats — your personal stats",
-
-  "GAME_ALREADY_RUNNING": "⚠️ A game is already running in this group.\n\nFinish or end the current game before starting another one.",
-  "NO_WORDS_AVAILABLE": "😕 No words are available for this mode right now. Try again shortly.",
-  "LUCKY_ROUND_BANNER": "🍀 Lucky Round! All earned points are doubled!",
-  "GUESS_ALREADY_GUESSED": "⚠️ **{guess}** has already been guessed!",
-  "GUESS_INVALID_WORD": "❌ **{guess}** is not a valid word!",
-
-  "END_GAME_NO_ACTIVE": "No game is currently running in this group.",
-  "END_GAME_ENDED_BY_ADMIN": "🛑 Game ended by admin.\n\nAnswer: **{word}**",
-
-  "GAME_INFO_NO_ACTIVE": "No game is currently running in this group. Use /new to start one.",
-  "GAME_INFO_TEXT": "🎮 <b>Game Info</b>\n\nMode: {length}-Letter\nAttempts: {attempts}/30\nStarted by: {starter}\nElapsed: {elapsed}\nDifficulty: {difficulty}",
-
-  "SETMODE_USAGE": "Usage: `/setmode normal|medium|hard`",
-  "SETMODE_SUCCESS": "✅ Difficulty set to **{difficulty}** for future games in this group.",
-
-  "LEADERBOARD_GROUP_TITLE": "🏆 <b>Leaderboard — {chat_title}</b>",
-  "LEADERBOARD_GLOBAL_TITLE": "🌍 <b>Global Leaderboard</b>",
-  "LEADERBOARD_NO_GAMES": "{title}\n\nNo games have been played yet.",
-
-  "MYSTATS_GROUP_HEADING": "📊 Stats in {chat_title}",
-  "MYSTATS_GLOBAL_HEADING": "🌍 Global Stats",
-  "MYSTATS_FASTEST_NONE": "—",
-  "MYSTATS_BADGES_NONE": "None yet",
-  "MYSTATS_BLOCK": "<b>{heading}</b>\nGames Played: {games_played}\nGames Won: {games_won}\nGames Lost: {games_lost}\nTotal Points: {total_points}\nCurrent Streak: {current_streak}\nHighest Streak: {highest_streak}\nFastest Solve: {fastest_solve}\nPerfect Guesses: {perfect_guesses}\nTotal Guesses: {total_guesses}\nAverage Attempts: {average_attempts}\nBadges: {badges}",
-
-  "BOARD_HEADER": "{emoji} ⌞ {length}-L Mode ⌝ 〢{attempts}/{max_attempts}",
-  "BOARD_GUESS_LINE": "{guess} → {pattern}",
-
-  "RESULT_WIN": "🎉 Solved in {attempts} attempts!\n\nAnswer: {word}",
-  "RESULT_LOSE": "❌ Nobody guessed the word.\n\nAnswer:\n{word}",
-
-  "POINTS_TOTAL": "\n\n**Total: +{total} points**",
-  "LOG_NEW_CHAT": "New Chat Log\n\nChat: {chat_id} | {chat_title}\nUser: {user_id} | {user_mention}",
-  "LOG_NEW_USER": "New User Log\n\nID: {user_id}\nName: {user_mention} | ",
-  "PING_TEXT": "🏓 **Pong!**\n\n**Latency:** `{latency}ms`\n\n**Uptime:** `{uptime}`\n**CPU:** `{cpu}%`\n**RAM:** `{ram}%`\n**Disk:** `{disk}%`\n**PyTgCalls Latency:** `0.01ms`",
-  "SUPPORT_BUTTON": "Support Group"
+  "start_welcome": "👋 **Senpai**\n\nGuess the hidden word letter by letter — Wordle style, right inside your Telegram groups.\n\nAdd me to a group and try:\n/new — random length game\n/new4, /new5, /new6 — pick a specific length\n/game — see the current game's info\n/leaderboard — top players in this group\n/mystats — your personal stats",
+  "game_already_running": "⚠️ A game is already running in this group.\n\nFinish or end the current game before starting another one.",
+  "no_words_available": "😕 No words are available for this mode right now. Try again shortly.",
+  "lucky_round_banner": "🍀 Lucky Round! All earned points are doubled!",
+  "guess_already_guessed": "⚠️ **{guess}** has already been guessed!",
+  "guess_invalid_word": "❌ **{guess}** is not a valid word!",
+  "end_game_no_active": "No game is currently running in this group.",
+  "end_game_ended_by_admin": "🛑 Game ended by admin.\n\nAnswer: **{word}**",
+  "game_info_no_active": "No game is currently running in this group. Use /new to start one.",
+  "game_info_text": "🎮 <b>Game Info</b>\n\nMode: {length}-Letter\nAttempts: {attempts}/30\nStarted by: {starter}\nElapsed: {elapsed}\nDifficulty: {difficulty}",
+  "setmode_usage": "Usage: `/setmode normal|medium|hard`",
+  "setmode_success": "✅ Difficulty set to **{difficulty}** for future games in this group.",
+  "leaderboard_group_title": "🏆 <b>Leaderboard — {chat_title}</b>",
+  "leaderboard_global_title": "🌍 <b>Global Leaderboard</b>",
+  "leaderboard_no_games": "{title}\n\nNo games have been played yet.",
+  "mystats_group_heading": "📊 Stats in {chat_title}",
+  "mystats_global_heading": "🌍 Global Stats",
+  "mystats_fastest_none": "—",
+  "mystats_badges_none": "None yet",
+  "mystats_block": "<b>{heading}</b>\nGames Played: {games_played}\nGames Won: {games_won}\nGames Lost: {games_lost}\nTotal Points: {total_points}\nCurrent Streak: {current_streak}\nHighest Streak: {highest_streak}\nFastest Solve: {fastest_solve}\nPerfect Guesses: {perfect_guesses}\nTotal Guesses: {total_guesses}\nAverage Attempts: {average_attempts}\nBadges: {badges}",
+  "board_header": "{emoji} ⌞ {length}-L Mode ⌝ 〢{attempts}/{max_attempts}",
+  "board_guess_line": "{guess} → {pattern}",
+  "result_win": "🎉 Solved in {attempts} attempts!\n\nAnswer: {word}",
+  "result_lose": "❌ Nobody guessed the word.\n\nAnswer:\n{word}",
+  "points_total": "\n\n**Total: +{total} points**",
+  "log_new_chat": "New Chat Log\n\nChat: {chat_id} | {chat_title}\nUser: {user_id} | {user_mention}",
+  "log_new_user": "New User Log\n\nID: {user_id}\nName: {user_mention} | ",
+  "ping_text": "🏓 **Pong!**\n\n**Latency:** `{latency}ms`\n\n**Uptime:** `{uptime}`\n**CPU:** `{cpu}%`\n**RAM:** `{ram}%`\n**Disk:** `{disk}%`\n**PyTgCalls Latency:** `0.01ms`",
+  "support": "Support"
 }
