@@ -13,6 +13,7 @@ _PLUGINS = [
     "Senpai.plugins.guess",
     "Senpai.plugins.leaderboard",
     "Senpai.plugins.mystats",
+    "Senpai.plugins.ping",
 ]
 
 

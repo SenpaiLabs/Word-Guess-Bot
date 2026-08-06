@@ -34,5 +34,7 @@
 
   "POINTS_TOTAL": "\n\n**Total: +{total} points**",
   "LOG_NEW_CHAT": "New Chat Log\n\nChat: {chat_id} | {chat_title}\nUser: {user_id} | {user_mention}",
-  "LOG_NEW_USER": "New User Log\n\nID: {user_id}\nName: {user_mention} | "
+  "LOG_NEW_USER": "New User Log\n\nID: {user_id}\nName: {user_mention} | ",
+  "PING_TEXT": "🏓 **Pong!**\n\n**Latency:** `{latency}ms`\n\n**Uptime:** `{uptime}`\n**CPU:** `{cpu}%`\n**RAM:** `{ram}%`\n**Disk:** `{disk}%`\n**PyTgCalls Latency:** `0.01ms`",
+  "SUPPORT_BUTTON": "Support Group"
 }
