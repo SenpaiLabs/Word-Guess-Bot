@@ -12,4 +12,7 @@ from Senpai.core.lang import get_string
 async def start_cmd(_, m: types.Message):
     if m.from_user:
         await db.register_user(User(user_id=m.from_user.id, first_name=m.from_user.first_name, username=m.from_user.username))
-    await m.reply_text(get_string("START_WELCOME"))
+    await m.reply_photo(
+        photo="https://raw.githubusercontent.com/SenpaiLabs/Word-Guess-Bot/main/.github/banner.png",
+        caption=get_string("START_WELCOME")
+    )
