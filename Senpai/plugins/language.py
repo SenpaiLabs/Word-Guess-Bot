@@ -32,7 +32,7 @@ async def _lang_cb(_, query: types.CallbackQuery):
         user_id = query.from_user.id
         member = await app.get_chat_member(chat_id, user_id)
         if member.status not in (types.enums.ChatMemberStatus.ADMINISTRATOR, types.enums.ChatMemberStatus.OWNER):
-            await query.answer("Only admins can change the group language!", show_alert=True)
+            await query.answer(query.lang.get("lang_admin_only", "Only admins can change the group language!"), show_alert=True)
             return
 
     if data[0] in ["language", "lang"] and len(data) == 1:
@@ -53,7 +53,7 @@ async def _lang_cb(_, query: types.CallbackQuery):
     
     # Reload string in new language by fetching manually for the confirmation message
     lang_dict = lang.languages.get(_lang_code, lang.languages["en"])
-    success_text = lang_dict.get("lang_changed", f"✅ Language successfully set to **{_lang_code.upper()}** for this chat.")
+    success_text = lang_dict.get("lang_changed", "✅ Language successfully set to **{}** for this chat.").format(_lang_code.upper())
     
     await query.answer(f"Language changed to {_lang_code.upper()}", show_alert=True)
     await query.edit_message_text(success_text)

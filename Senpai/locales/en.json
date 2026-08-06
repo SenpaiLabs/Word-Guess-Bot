@@ -39,5 +39,9 @@
     "gcast_usage": "Please reply to a message to broadcast it.",
     "gcast_active": "A broadcast is already in progress. Please wait.",
     "gcast_start": "Broadcast started...",
-    "gcast_end": "Broadcast finished!\n\nGroups: {}\nUsers: {}"
+    "gcast_end": "Broadcast finished!\n\nGroups: {}\nUsers: {}",
+    "lang_choose": "Please select your preferred language:",
+    "lang_same": "Language is already {}!",
+    "lang_changed": "✅ Language successfully set to **{}** for this chat.",
+    "lang_admin_only": "Only admins can change the group language!"
 }
