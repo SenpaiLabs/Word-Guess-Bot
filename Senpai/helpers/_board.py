@@ -8,9 +8,9 @@ from Senpai.core.lang import get_string
 MODE_EMOJI = {4: "🍷", 5: "🍇", 6: "🍉"}
 
 
-def render_board(game: Game) -> str:
+def render_board(game: Game, lang_dict: dict) -> str:
     emoji = MODE_EMOJI.get(game.length, "🎯")
-    header = get_string("BOARD_HEADER").format(
+    header = lang_dict.get("board_header", "").format(
         emoji=emoji,
         length=game.length,
         attempts=game.attempts,
@@ -19,12 +19,12 @@ def render_board(game: Game) -> str:
 
     lines = [header, ""]
     for g in game.guesses:
-        lines.append(get_string("BOARD_GUESS_LINE").format(guess=g.guess.upper(), pattern=g.pattern))
+        lines.append(lang_dict.get("board_guess_line", "").format(guess=g.guess.upper(), pattern=g.pattern))
 
     return "\n".join(lines)
 
 
-def render_result(game: Game, won: bool) -> str:
+def render_result(game: Game, won: bool, lang_dict: dict) -> str:
     if won:
-        return get_string("RESULT_WIN").format(attempts=game.attempts, word=game.word.upper())
-    return get_string("RESULT_LOSE").format(word=game.word.upper())
+        return lang_dict.get("result_win", "").format(attempts=game.attempts, word=game.word.upper())
+    return lang_dict.get("result_lose", "").format(word=game.word.upper())

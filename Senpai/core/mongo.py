@@ -194,6 +194,19 @@ class MongoDB:
             upsert=True,
         )
 
+    async def get_chat_lang(self, chat_id: int) -> str:
+        if chat_id > 0:
+            doc = await self.users.find_one({"_id": chat_id})
+        else:
+            doc = await self.groups.find_one({"_id": chat_id})
+        return doc.get("lang", config.DEFAULT_LANG) if doc else config.DEFAULT_LANG
+
+    async def set_chat_lang(self, chat_id: int, lang: str) -> None:
+        if chat_id > 0:
+            await self.users.update_one({"_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
+        else:
+            await self.groups.update_one({"_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
+
 
     async def register_user(self, user: User) -> None:
         await self.users.update_one(
@@ -201,6 +214,14 @@ class MongoDB:
             {"$set": {"first_name": user.first_name, "username": user.username}},
             upsert=True,
         )
+
+    async def get_chats(self) -> list[int]:
+        cursor = self.groups.find({})
+        return [doc["_id"] async for doc in cursor]
+
+    async def get_users(self) -> list[int]:
+        cursor = self.users.find({})
+        return [doc["_id"] async for doc in cursor]
 
 
     async def get_statistics(self, user_id: int, chat_id: int) -> Statistics:
