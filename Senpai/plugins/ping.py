@@ -3,9 +3,9 @@ from __future__ import annotations
 import time
 import psutil
 from pyrogram import filters, types
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from Senpai import app
+from Senpai.helpers._inline import get_support_markup
 from Senpai.core.lang import get_string
 from config import config
 
@@ -67,11 +67,7 @@ async def ping_cmd(_, m: types.Message):
         disk=disk
     )
     
-    reply_markup = None
-    if config.SUPPORT_CHAT:
-        reply_markup = InlineKeyboardMarkup([
-            [InlineKeyboardButton(get_string("SUPPORT_BUTTON"), url=config.SUPPORT_CHAT)]
-        ])
+    reply_markup = get_support_markup()
     
     if config.START_IMG:
         await reply.edit_caption(caption=text, reply_markup=reply_markup)
