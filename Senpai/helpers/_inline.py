@@ -15,11 +15,11 @@ def get_support_markup() -> InlineKeyboardMarkup | None:
 
 def start_pm_markup(bot_username: str) -> InlineKeyboardMarkup:
     buttons = [
-        [InlineKeyboardButton(get_string("btn_add_me"), url=f"http://t.me/{bot_username}?startgroup=true")]
+        [InlineKeyboardButton(get_string("add_me"), url=f"http://t.me/{bot_username}?startgroup=true")]
     ]
     
     row2 = []
-    row2.append(InlineKeyboardButton(get_string("btn_help"), callback_data="help"))
+    row2.append(InlineKeyboardButton(get_string("help"), callback_data="help"))
     if config.SUPPORT_CHAT:
         row2.append(InlineKeyboardButton(get_string("support"), url=config.SUPPORT_CHAT))
     if row2:
@@ -27,8 +27,8 @@ def start_pm_markup(bot_username: str) -> InlineKeyboardMarkup:
         
     row3 = []
     if getattr(config, "SUPPORT_CHANNEL", ""):
-        row3.append(InlineKeyboardButton(get_string("btn_channel"), url=config.SUPPORT_CHANNEL))
-    row3.append(InlineKeyboardButton(get_string("btn_source"), url="https://github.com/SenpaiLabs/Word-Guess-Bot"))
+        row3.append(InlineKeyboardButton(get_string("channel"), url=config.SUPPORT_CHANNEL))
+    row3.append(InlineKeyboardButton(get_string("source"), url="https://github.com/SenpaiLabs/Word-Guess-Bot"))
     if row3:
         buttons.append(row3)
         
@@ -36,8 +36,8 @@ def start_pm_markup(bot_username: str) -> InlineKeyboardMarkup:
 
 def start_gc_markup() -> InlineKeyboardMarkup:
     buttons = [
-        [InlineKeyboardButton(get_string("btn_language"), callback_data="lang")]
+        [InlineKeyboardButton(get_string("language"), callback_data="lang")]
     ]
-    buttons[0].append(InlineKeyboardButton(get_string("btn_source"), url="https://github.com/SenpaiLabs/Word-Guess-Bot"))
+    buttons[0].append(InlineKeyboardButton(get_string("source"), url="https://github.com/SenpaiLabs/Word-Guess-Bot"))
     
     return InlineKeyboardMarkup(buttons)
