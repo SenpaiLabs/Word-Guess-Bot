@@ -32,7 +32,7 @@ async def start_cmd(_, m: types.Message):
     me = await app.get_me()
     
     if m.chat.type == enums.ChatType.PRIVATE:
-        text = m.lang.get("start_pm", "start_pm")
+        text = m.lang.get("start_pm", "start_pm").format(name=m.from_user.first_name)
         reply_markup = start_pm_markup(me.username, m.lang)
     else:
         text = m.lang.get("start_gc", "start_gc")
