@@ -52,7 +52,6 @@ class Config:
     LOG_GROUP_ID: int = field(default_factory=lambda: _int("LOG_GROUP_ID", 0))
     SUPPORT_CHAT: str = field(default_factory=lambda: getenv("SUPPORT_CHAT", ""))
     CHANNEL_LINK: str = field(default_factory=lambda: getenv("CHANNEL_LINK", ""))
-    SOURCE_LINK: str = field(default_factory=lambda: getenv("SOURCE_LINK", "https://github.com/SenpaiLabs/Word-Guess-Bot"))
     START_IMG: str = field(default_factory=lambda: getenv("START_IMG", "https://raw.githubusercontent.com/SenpaiLabs/Word-Guess-Bot/main/.github/banner.png"))
 
     def validate(self) -> None:

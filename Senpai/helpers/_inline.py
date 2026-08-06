@@ -28,8 +28,7 @@ def start_pm_markup(bot_username: str) -> InlineKeyboardMarkup:
     row3 = []
     if getattr(config, "CHANNEL_LINK", ""):
         row3.append(InlineKeyboardButton(get_string("btn_channel"), url=config.CHANNEL_LINK))
-    if getattr(config, "SOURCE_LINK", ""):
-        row3.append(InlineKeyboardButton(get_string("btn_source"), url=config.SOURCE_LINK))
+    row3.append(InlineKeyboardButton(get_string("btn_source"), url="https://github.com/SenpaiLabs/Word-Guess-Bot"))
     if row3:
         buttons.append(row3)
         
@@ -39,7 +38,6 @@ def start_gc_markup() -> InlineKeyboardMarkup:
     buttons = [
         [InlineKeyboardButton(get_string("btn_language"), callback_data="lang")]
     ]
-    if getattr(config, "SOURCE_LINK", ""):
-        buttons[0].append(InlineKeyboardButton(get_string("btn_source"), url=config.SOURCE_LINK))
+    buttons[0].append(InlineKeyboardButton(get_string("btn_source"), url="https://github.com/SenpaiLabs/Word-Guess-Bot"))
     
     return InlineKeyboardMarkup(buttons)
