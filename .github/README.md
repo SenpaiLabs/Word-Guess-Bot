@@ -19,7 +19,7 @@ Fully async, modular, and built to scale across thousands of groups.
 </a>
 <br>
 
-<img src=".github/banner.png" width="720" height="auto">
+<img src="banner.png" width="720" height="auto">
 
 Word Guess Bot lets your group play Wordle-style word guessing games directly in Telegram.<br>
 Built with Python, Pyrogram, and MongoDB, it features AI word generation via Groq and is optimized for VPS or Docker.
