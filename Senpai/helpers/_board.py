@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from config import config
 from Senpai.helpers._dataclass import Game
-from Senpai.core.lang import get_string
+
 
 MODE_EMOJI = {4: "🍷", 5: "🍇", 6: "🍉"}
 

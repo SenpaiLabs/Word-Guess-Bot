@@ -3,7 +3,7 @@ from __future__ import annotations
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from config import config
-from Senpai.core.lang import get_string
+
 
 
 def get_support_markup(lang_dict: dict) -> InlineKeyboardMarkup | None:
