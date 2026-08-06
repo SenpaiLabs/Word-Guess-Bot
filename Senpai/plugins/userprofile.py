@@ -29,7 +29,7 @@ def _format_block(stats: Statistics, heading: str) -> str:
     )
 
 
-@app.on_message(filters.command("userprofile"))
+@app.on_message(filters.command("profile"))
 async def my_stats(_, m: types.Message):
     if m.from_user:
         await db.register_user(
