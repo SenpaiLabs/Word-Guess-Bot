@@ -1,0 +1,8 @@
+{
+  "START_TEXT": "Hey! I'm Word Guess Bot. Add me to a group and use /wordguess to start a round.",
+  "GAME_ALREADY_RUNNING": "A game is already running in this chat.",
+  "NO_WORDS_AVAILABLE": "No words available for this difficulty right now.",
+  "ADMIN_ONLY": "Only group admins can use this command.",
+  "LEADERBOARD_TITLE": "🏆 Leaderboard",
+  "MY_STATS_TITLE": "📊 Your Stats"
+}

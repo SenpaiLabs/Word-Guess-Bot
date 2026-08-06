@@ -1,0 +1,10 @@
+services:
+  bot:
+    build: .
+    container_name: word-guess-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./words:/app/words
+      - ./log.txt:/app/log.txt
