@@ -1,56 +1,59 @@
-from pyrogram import filters, types, enums
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram import filters, types
 
 from Senpai import app
-from Senpai.core.lang import get_string
+from Senpai.core.lang import lang
 from Senpai.core.mongo import db
-from Senpai.core.dir import LOCALES_DIR
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-import json
-
-def get_available_languages() -> list[tuple[str, str]]:
-    languages = []
-    for file in LOCALES_DIR.glob("*.json"):
-        try:
-            data = json.loads(file.read_text(encoding="utf-8"))
-            lang_code = file.stem
-            lang_name = data.get("language_name", lang_code.upper())
-            languages.append((lang_code, lang_name))
-        except Exception:
-            pass
-    return languages
-
-@app.on_callback_query(filters.regex("^lang$"))
-async def language_menu_cb(_, query: types.CallbackQuery):
-    chat_id = query.message.chat.id
-    languages = get_available_languages()
-    
+def lang_markup(current_lang: str):
+    languages = lang.get_languages()
     buttons = []
-    for lang_code, lang_name in languages:
-        buttons.append([InlineKeyboardButton(lang_name, callback_data=f"setlang_{lang_code}")])
-    
-    markup = InlineKeyboardMarkup(buttons)
-    text = "Please select your preferred language:"
-    
-    await query.message.edit_text(text, reply_markup=markup)
+    for lang_code, lang_name in languages.items():
+        text = f"{lang_name} {'✅' if current_lang == lang_code else ''}"
+        buttons.append([InlineKeyboardButton(text, callback_data=f"language {lang_code}")])
+    return InlineKeyboardMarkup(buttons)
 
-@app.on_callback_query(filters.regex(r"^setlang_(.*)$"))
-async def set_language_cb(_, query: types.CallbackQuery):
-    lang_code = query.matches[0].group(1)
-    chat_id = query.message.chat.id
+@app.on_message(filters.command(["lang", "language"]))
+@lang.language()
+async def _lang_cmd(_, m: types.Message):
+    current = await db.get_chat_lang(m.chat.id)
+    keyboard = lang_markup(current)
+    await m.reply_text(m.lang.get("lang_choose", "Please select your preferred language:"), reply_markup=keyboard)
+
+
+@app.on_callback_query(filters.regex(r"^language") | filters.regex(r"^lang$"))
+@lang.language()
+async def _lang_cb(_, query: types.CallbackQuery):
+    data = query.data.split()
     
+    chat_id = query.message.chat.id
     if chat_id < 0:
         # Check if user is admin in group
         user_id = query.from_user.id
         member = await app.get_chat_member(chat_id, user_id)
-        if member.status not in (enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER):
+        if member.status not in (types.enums.ChatMemberStatus.ADMINISTRATOR, types.enums.ChatMemberStatus.OWNER):
             await query.answer("Only admins can change the group language!", show_alert=True)
             return
 
-    await db.set_chat_lang(chat_id, lang_code)
+    if data[0] in ["language", "lang"] and len(data) == 1:
+        current = await db.get_chat_lang(chat_id)
+        keyboard = lang_markup(current)
+        return await query.edit_message_text(
+            query.lang.get("lang_choose", "Please select your preferred language:"), reply_markup=keyboard
+        )
+
+    _lang_code = data[1]
+    current = await db.get_chat_lang(chat_id)
+    if current == _lang_code:
+        return await query.answer(
+            query.lang.get("lang_same", "Language is already {}!").format(current), show_alert=True
+        )
+
+    await db.set_chat_lang(chat_id, _lang_code)
     
-    # Reload string in new language
-    success_text = f"✅ Language successfully set to **{lang_code.upper()}** for this chat."
+    # Reload string in new language by fetching manually for the confirmation message
+    lang_dict = lang.languages.get(_lang_code, lang.languages["en"])
+    success_text = lang_dict.get("lang_changed", f"✅ Language successfully set to **{_lang_code.upper()}** for this chat.")
     
-    await query.message.edit_text(success_text)
-    await query.answer("Language updated successfully!", show_alert=True)
+    await query.answer(f"Language changed to {_lang_code.upper()}", show_alert=True)
+    await query.edit_message_text(success_text)

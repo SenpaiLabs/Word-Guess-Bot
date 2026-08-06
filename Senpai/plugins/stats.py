@@ -9,12 +9,13 @@ from pyrogram import filters, types
 import pyrogram
 
 from Senpai import app
-from Senpai.core.lang import get_string
+from Senpai.core.lang import lang
 from Senpai.core.mongo import db
 from Senpai.helpers._inline import get_support_markup
 from config import config
 
 @app.on_message(filters.command("stats"))
+@lang.language()
 async def stats_cmd(_, m: types.Message):
     if config.PING_IMG:
         reply = await m.reply_photo(
@@ -51,7 +52,7 @@ async def stats_cmd(_, m: types.Message):
     me = await app.get_me()
     bot_name = me.first_name
     
-    text = get_string(m.chat.id, "stats_text").format(
+    text = m.lang.get("stats_text", "stats_text").format(
         bot_name=bot_name,
         sudos=sudos,
         chats=chats,
@@ -68,7 +69,7 @@ async def stats_cmd(_, m: types.Message):
         pyrogram_version=pyrogram_version
     )
     
-    reply_markup = get_support_markup(m.chat.id)
+    reply_markup = get_support_markup(m.lang)
     
     if config.PING_IMG:
         await reply.edit_caption(caption=text, reply_markup=reply_markup)

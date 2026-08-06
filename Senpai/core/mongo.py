@@ -37,13 +37,6 @@ class MongoDB:
 
         await self._ensure_indexes()
         await self.import_words()
-        
-        # Load language preferences into cache
-        from Senpai.core.lang import chat_lang_cache
-        async for group in self.groups.find({"lang": {"$exists": True}}):
-            chat_lang_cache[group["_id"]] = group["lang"]
-        async for user in self.users.find({"lang": {"$exists": True}}):
-            chat_lang_cache[user["_id"]] = user["lang"]
 
     async def close(self) -> None:
         self.client.close()
@@ -202,10 +195,6 @@ class MongoDB:
         )
 
     async def get_chat_lang(self, chat_id: int) -> str:
-        from Senpai.core.lang import chat_lang_cache
-        lang = chat_lang_cache.get(chat_id)
-        if lang:
-            return lang
         if chat_id > 0:
             doc = await self.users.find_one({"_id": chat_id})
         else:
@@ -213,8 +202,6 @@ class MongoDB:
         return doc.get("lang", config.DEFAULT_LANG) if doc else config.DEFAULT_LANG
 
     async def set_chat_lang(self, chat_id: int, lang: str) -> None:
-        from Senpai.core.lang import chat_lang_cache
-        chat_lang_cache[chat_id] = lang
         if chat_id > 0:
             await self.users.update_one({"_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
         else:

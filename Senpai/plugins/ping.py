@@ -6,7 +6,7 @@ from pyrogram import filters, types
 
 from Senpai import app
 from Senpai.helpers._inline import get_support_markup
-from Senpai.core.lang import get_string
+from Senpai.core.lang import lang
 from config import config
 
 # Store bot start time to calculate uptime
@@ -39,6 +39,7 @@ def get_readable_time(seconds: int) -> str:
     return ping_time if ping_time else "0s"
 
 @app.on_message(filters.command("ping"))
+@lang.language()
 async def ping_cmd(_, m: types.Message):
     start_t = time.time()
     
@@ -59,7 +60,7 @@ async def ping_cmd(_, m: types.Message):
     ram = psutil.virtual_memory().percent
     disk = psutil.disk_usage("/").percent
     
-    text = get_string(m.chat.id, "ping_text").format(
+    text = m.lang.get("ping_text", "ping_text").format(
         latency=latency,
         uptime=uptime,
         cpu=cpu,
@@ -67,7 +68,7 @@ async def ping_cmd(_, m: types.Message):
         disk=disk
     )
     
-    reply_markup = get_support_markup(m.chat.id)
+    reply_markup = get_support_markup(m.lang)
     
     if config.PING_IMG:
         await reply.edit_caption(caption=text, reply_markup=reply_markup)
