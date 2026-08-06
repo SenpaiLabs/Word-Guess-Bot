@@ -374,6 +374,12 @@ wheels = [
 ]
 
 [[package]]
+name = "tgcrypto"
+version = "1.2.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/33/59/7cf5ced989e3139a791d5452d58cb8994de589576b80f9267ba76d794f6c/TgCrypto-1.2.5.tar.gz", hash = "sha256:9bc2cac6fb9a12ef5b08f3dd500174fe374d89b660cce981f57e3138559cb682", size = 37280, upload-time = "2022-11-11T19:55:11.436Z" }
+
+[[package]]
 name = "tqdm"
 version = "4.70.0"
 source = { registry = "https://pypi.org/simple" }
@@ -439,6 +445,7 @@ dependencies = [
     { name = "pymongo" },
     { name = "pyrogram" },
     { name = "python-dotenv" },
+    { name = "tgcrypto" },
 ]
 
 [package.metadata]
@@ -450,4 +457,5 @@ requires-dist = [
     { name = "pymongo", specifier = ">=4.17.0" },
     { name = "pyrogram", specifier = ">=2.0.106" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
+    { name = "tgcrypto", specifier = ">=1.2.5" },
 ]
