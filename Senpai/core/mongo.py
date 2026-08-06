@@ -215,6 +215,14 @@ class MongoDB:
             upsert=True,
         )
 
+    async def get_chats(self) -> list[int]:
+        cursor = self.groups.find({})
+        return [doc["_id"] async for doc in cursor]
+
+    async def get_users(self) -> list[int]:
+        cursor = self.users.find({})
+        return [doc["_id"] async for doc in cursor]
+
 
     async def get_statistics(self, user_id: int, chat_id: int) -> Statistics:
         doc = await self.statistics.find_one({"_id": f"{chat_id}:{user_id}"})
