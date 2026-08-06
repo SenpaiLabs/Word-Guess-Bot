@@ -1,0 +1,23 @@
+[project]
+name = "word-guess-bot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "senpailabs", email = "senpailabs@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "apscheduler>=3.11.3",
+    "groq>=1.6.0",
+    "motor>=3.7.1",
+    "openai>=2.53.0",
+    "pymongo>=4.17.0",
+    "pyrogram>=2.0.106",
+    "python-dotenv>=1.2.2",
+]
+
+
+[build-system]
+requires = ["uv_build>=0.12.2,<0.13.0"]
+build-backend = "uv_build"

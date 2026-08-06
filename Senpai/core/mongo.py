@@ -1,10 +1,3 @@
-"""
-Word Guess Bot - Database layer
-
-Async MongoDB access via Motor. Mirrors the same "single class,
-grouped methods" pattern used elsewhere for consistency and easy
-in-memory caching of hot paths.
-"""
 
 from __future__ import annotations
 
@@ -31,7 +24,7 @@ class MongoDB:
         self.statistics = self.db.statistics
         self.cache = self.db.cache
 
-        # in-memory caches for hot paths
+
         self._group_difficulty: dict[int, str] = {}
 
     async def connect(self) -> None:
@@ -47,7 +40,6 @@ class MongoDB:
 
     async def close(self) -> None:
         self.client.close()
-        logger.info("Database connection closed.")
 
     async def _ensure_indexes(self) -> None:
         await self.words.create_index([("length", 1), ("difficulty", 1), ("enabled", 1)])
@@ -55,9 +47,7 @@ class MongoDB:
         await self.games.create_index([("chat_id", 1), ("status", 1)])
         await self.statistics.create_index([("chat_id", 1), ("total_points", -1)])
 
-    # ------------------------------------------------------------------
-    # WORD IMPORT (one-time, from words/4.txt, 5.txt, 6.txt)
-    # ------------------------------------------------------------------
+
     async def import_words(self) -> None:
         marker = await self.cache.find_one({"_id": "words_imported"})
         if marker:
@@ -84,7 +74,6 @@ class MongoDB:
                 result = await self.words.insert_many(docs, ordered=False)
                 total += len(result.inserted_ids)
             except Exception:
-                # duplicates are fine on re-run; count what we can
                 pass
 
         await self.cache.update_one(
@@ -92,17 +81,10 @@ class MongoDB:
         )
         logger.info(f"Word import complete. {total} words imported.")
 
-    # ------------------------------------------------------------------
-    # WORDS
-    # ------------------------------------------------------------------
+
     async def get_random_word(
         self, chat_id: int, length: int, difficulty: str
     ) -> Word | None:
-        """
-        Pick a word of the given length/difficulty that this chat hasn't
-        seen yet. Falls back to resetting the chat's used-word history
-        once every word has been exhausted.
-        """
         used_ids = await self._get_used_word_ids(chat_id, length)
 
         pipeline = [
@@ -122,7 +104,6 @@ class MongoDB:
             break
 
         if not doc:
-            # exhausted — reset history for this chat/length and retry once
             await self.group_used_words.delete_one({"_id": f"{chat_id}:{length}"})
             async for d in self.words.aggregate(
                 [
@@ -152,7 +133,6 @@ class MongoDB:
         )
 
     async def add_generated_words(self, words: list[str], length: int, difficulty: str) -> int:
-        """Persist AI-generated words permanently (see engine/word_generator.py)."""
         docs = [Word(word=w, length=length, difficulty=difficulty).to_doc() for w in words]
         if not docs:
             return 0
@@ -172,9 +152,7 @@ class MongoDB:
         doc = await self.words.find_one({"word": word.lower()})
         return doc is not None
 
-    # ------------------------------------------------------------------
-    # GAMES
-    # ------------------------------------------------------------------
+
     async def get_active_game(self, chat_id: int) -> Game | None:
         doc = await self.games.find_one({"chat_id": chat_id, "status": "active"})
         return Game.from_doc(doc) if doc else None
@@ -187,15 +165,12 @@ class MongoDB:
         )
 
     async def finish_game(self, game: Game) -> None:
-        """Move a finished game out of 'active' status (kept for history)."""
         await self.games.update_one(
             {"chat_id": game.chat_id, "status": "active"},
             {"$set": game.to_doc()},
         )
 
-    # ------------------------------------------------------------------
-    # GROUPS
-    # ------------------------------------------------------------------
+
     async def get_group_difficulty(self, chat_id: int) -> str:
         if chat_id in self._group_difficulty:
             return self._group_difficulty[chat_id]
@@ -219,9 +194,7 @@ class MongoDB:
             upsert=True,
         )
 
-    # ------------------------------------------------------------------
-    # USERS
-    # ------------------------------------------------------------------
+
     async def register_user(self, user: User) -> None:
         await self.users.update_one(
             {"_id": user.user_id},
@@ -229,9 +202,7 @@ class MongoDB:
             upsert=True,
         )
 
-    # ------------------------------------------------------------------
-    # STATISTICS
-    # ------------------------------------------------------------------
+
     async def get_statistics(self, user_id: int, chat_id: int) -> Statistics:
         doc = await self.statistics.find_one({"_id": f"{chat_id}:{user_id}"})
         return Statistics.from_doc(doc) if doc else Statistics(user_id=user_id, chat_id=chat_id)
@@ -246,16 +217,10 @@ class MongoDB:
         return [Statistics.from_doc(doc) async for doc in cursor]
 
     async def get_users_map(self, user_ids: list[int]) -> dict:
-        """Batch-fetch stored user profiles by id — no live Telegram API calls."""
         cursor = self.users.find({"_id": {"$in": user_ids}})
         return {doc["_id"]: User.from_doc(doc) async for doc in cursor}
 
     async def claim_daily_first_win(self, user_id: int) -> bool:
-        """
-        Atomically checks-and-marks whether this is the user's first win
-        of the day (UTC). Returns True only the first time it's called
-        for a given (user, day) pair.
-        """
         from datetime import datetime, timezone
 
         day = datetime.now(timezone.utc).strftime("%Y-%m-%d")

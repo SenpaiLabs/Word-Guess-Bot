@@ -1,0 +1,39 @@
+{
+  "name": "Word Guess Bot",
+  "description": "A production-ready Telegram Wordle-style Bot",
+  "keywords": [
+    "telegram",
+    "bot",
+    "wordle",
+    "python",
+    "pyrogram"
+  ],
+  "repository": "https://github.com/SenpaiLabs/Word-Guess-Bot",
+  "env": {
+    "API_ID": {
+      "description": "Your Telegram API_ID",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Your Telegram API_HASH",
+      "required": true
+    },
+    "BOT_TOKEN": {
+      "description": "Your Telegram BOT_TOKEN",
+      "required": true
+    },
+    "MONGO_URL": {
+      "description": "Your MongoDB connection string",
+      "required": true
+    },
+    "GROQ_API_KEY": {
+      "description": "Your Groq API key for AI word generation",
+      "required": false
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/astral-sh/heroku-buildpack-uv"
+    }
+  ]
+}

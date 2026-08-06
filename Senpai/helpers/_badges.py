@@ -1,10 +1,3 @@
-"""
-Word Guess Bot - Badges
-
-Persistent, per-user badges (recomputed after every stat update).
-"Top Player" (👑) is NOT stored here — it's rank-dependent and awarded
-dynamically at leaderboard render time, since it shifts as others play.
-"""
 
 from __future__ import annotations
 

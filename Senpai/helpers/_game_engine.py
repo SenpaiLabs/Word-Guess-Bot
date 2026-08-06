@@ -1,9 +1,3 @@
-"""
-Word Guess Bot - Game Engine
-
-Pure game logic, decoupled from Telegram. Handlers (Phase 4) call into
-this layer; this layer never touches Pyrogram directly.
-"""
 
 from __future__ import annotations
 
@@ -19,23 +13,17 @@ from Senpai.helpers._word_generator import maybe_replenish
 
 
 class GameAlreadyRunning(Exception):
-    """Raised when /new is used while a game is already active in the chat."""
+    pass
 
 
 class NoWordsAvailable(Exception):
-    """Raised when the word pool for a mode/difficulty is completely empty."""
-
-
+    pass
 class GameEngine:
     VALID_LENGTHS = (4, 5, 6)
 
     async def start_game(
         self, chat_id: int, started_by: int, length: int | None = None
     ) -> Game:
-        """
-        Start a new game. `length=None` triggers random mode
-        (equal probability across 4/5/6 letters).
-        """
         if await db.get_active_game(chat_id):
             raise GameAlreadyRunning
 
@@ -61,19 +49,11 @@ class GameEngine:
         )
         await db.save_game(game)
 
-        # Fire-and-forget: top up the word pool in the background if it's
-        # running low. Never blocks this call, never runs on every game.
         asyncio.create_task(maybe_replenish(chat_id, length, difficulty))
 
         return game
 
     async def process_guess(self, game: Game, guess: str, user_id: int) -> tuple[str, bool, bool]:
-        """
-        Evaluate a guess against the active game.
-
-        Returns (pattern, won, game_over).
-        game_over is True if won OR max attempts reached.
-        """
         guess = guess.strip().lower()
         pattern = evaluate_guess(guess, game.word)
         won = is_winning_pattern(pattern, game.length)
@@ -97,7 +77,6 @@ class GameEngine:
         return pattern, won, game_over
 
     async def end_game(self, game: Game) -> None:
-        """Admin-triggered /end — reveal answer and close the game state."""
         game.status = "ended"
         game.ended_at = time()
         await db.finish_game(game)

@@ -1,9 +1,3 @@
-"""
-Word Guess Bot - Scoring
-
-Pure, side-effect-free point calculation. Persistence happens in
-services/stats_service.py, which calls into this module.
-"""
 
 from __future__ import annotations
 
@@ -12,11 +6,11 @@ from dataclasses import dataclass
 from config import config
 
 HARD_MODE_BONUS = {4: 0, 5: 2, 6: 5}
-STREAK_BONUSES = {3: 3, 5: 5, 10: 10}  # highest threshold met wins, not stacked
+STREAK_BONUSES = {3: 3, 5: 5, 10: 10}
 
 
 def base_points(attempts: int) -> int:
-    """Guess #1 -> 30, Guess #2 -> 29, ... Guess #30 -> 1. Never below 0."""
+
     return max(0, config.MAX_ATTEMPTS - attempts + 1)
 
 

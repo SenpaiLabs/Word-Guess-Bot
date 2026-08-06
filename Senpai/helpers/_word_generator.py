@@ -1,12 +1,3 @@
-"""
-Word Guess Bot - AI background word generation (Groq)
-
-Triggered only when a chat's word pool for a given mode/difficulty is
-running low — never on every game. Runs as a fire-and-forget background
-task so gameplay never waits on an AI round-trip. Generated words are
-validated for shape (correct length, alphabetic) before being persisted
-permanently to MongoDB via db.add_generated_words().
-"""
 
 from __future__ import annotations
 
@@ -81,7 +72,7 @@ async def generate_words(length: int, difficulty: str, count: int) -> list[str]:
 async def replenish(length: int, difficulty: str) -> None:
     key = (length, difficulty)
     if key in _in_progress:
-        return  # a generation job for this mode is already running
+        return
 
     _in_progress.add(key)
     try:
@@ -95,11 +86,6 @@ async def replenish(length: int, difficulty: str) -> None:
 
 
 async def maybe_replenish(chat_id: int, length: int, difficulty: str) -> None:
-    """
-    Fire-and-forget check called after every game start. If the pool is
-    running low, schedules background generation without blocking the
-    caller. Cheap no-op the vast majority of the time.
-    """
     remaining = await db.remaining_word_count(chat_id, length, difficulty)
     if remaining <= REPLENISH_THRESHOLD:
         asyncio.create_task(replenish(length, difficulty))
