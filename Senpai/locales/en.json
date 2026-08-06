@@ -27,5 +27,6 @@
   "log_new_chat": "New Chat Log\n\nChat: {chat_id} | {chat_title}\nUser: {user_id} | {user_mention}",
   "log_new_user": "New User Log\n\nID: {user_id}\nName: {user_mention} | ",
   "ping_text": "🏓 **Pong!**\n\n**Latency:** `{latency}ms`\n\n**Uptime:** `{uptime}`\n**CPU:** `{cpu}%`\n**RAM:** `{ram}%`\n**Disk:** `{disk}%`\n**PyTgCalls Latency:** `0.01ms`",
+  "stats_text": "**{bot_name} stats**\n\nAssistants: 0\nAuto leave: False\n\nBlocked chats: 0\nBlocked users: 0\nSudo users: {sudos}\n\nServed chats: {chats}\nServed users: {users}\n\nModules: {modules}\nPlatform: {platform}\nRam usage:\n{ram_used}MB | {ram_total}GB\nCPU usage:\n{cpu}% ({cpu_cores} cores)\nStorage:\n{disk_used}GB | {disk_total}GB\nPython:\nv{python_version}\nPyrogram:\nv{pyrogram_version}\nPyTgCalls:\nN/A",
   "support": "Support"
 }
