@@ -1,11 +1,10 @@
-from __future__ import annotations
 
 import time
 import psutil
 from pyrogram import filters, types
 
 from Senpai import app
-from Senpai.helpers._inline import get_support_markup
+from Senpai.helpers._inline import inline
 from Senpai.core.lang import lang
 from config import config
 
@@ -68,7 +67,7 @@ async def ping_cmd(_, m: types.Message):
         disk=disk
     )
     
-    reply_markup = get_support_markup(m.lang)
+    reply_markup = inline.support_markup(m.lang)
     
     if config.PING_IMG:
         await reply.edit_caption(caption=text, reply_markup=reply_markup)

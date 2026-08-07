@@ -1,11 +1,11 @@
 
-from __future__ import annotations
 
 from time import time
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from config import config, logger
+from config import config
+from loguru import logger
 from Senpai.core.dir import WORDS_DIR
 from Senpai.helpers._dataclass import Game, Group, Statistics, User, Word
 
@@ -13,17 +13,20 @@ from Senpai.helpers._dataclass import Game, Group, Statistics, User, Word
 class MongoDB:
     def __init__(self):
         self.client = AsyncIOMotorClient(config.MONGO_URL, serverSelectionTimeoutMS=12500)
-        self.db = self.client[config.MONGO_DB_NAME]
+        self.db = self.client["WordGuessBot"]
 
         self.words = self.db.words
         self.games = self.db.games
-        self.groups = self.db.groups
-        self.users = self.db.users
+        self.groupsdb = self.db.groups
+        self.usersdb = self.db.users
         self.group_used_words = self.db.group_used_words
         self.leaderboards = self.db.leaderboards
         self.statistics = self.db.statistics
         self.cache = self.db.cache
 
+        self.chats = []
+        self.users = []
+        self.lang = {}
 
         self._group_difficulty: dict[int, str] = {}
 
@@ -37,6 +40,16 @@ class MongoDB:
 
         await self._ensure_indexes()
         await self.import_words()
+        await self.load_cache()
+
+    async def load_cache(self) -> None:
+        self.chats.extend([doc["_id"] async for doc in self.groupsdb.find({})])
+        self.users.extend([doc["_id"] async for doc in self.usersdb.find({})])
+        
+        async for doc in self.groupsdb.find({"lang": {"$exists": True}}):
+            self.lang[doc["_id"]] = doc["lang"]
+        async for doc in self.usersdb.find({"lang": {"$exists": True}}):
+            self.lang[doc["_id"]] = doc["lang"]
 
     async def close(self) -> None:
         self.client.close()
@@ -174,54 +187,64 @@ class MongoDB:
     async def get_group_difficulty(self, chat_id: int) -> str:
         if chat_id in self._group_difficulty:
             return self._group_difficulty[chat_id]
-        doc = await self.groups.find_one({"_id": chat_id})
-        difficulty = doc["difficulty"] if doc else config.DEFAULT_DIFFICULTY
+        doc = await self.groupsdb.find_one({"_id": chat_id})
+        difficulty = doc.get("difficulty", config.DEFAULT_DIFFICULTY) if doc else config.DEFAULT_DIFFICULTY
         self._group_difficulty[chat_id] = difficulty
         return difficulty
 
     async def set_group_difficulty(self, chat_id: int, difficulty: str, title: str = "") -> None:
         self._group_difficulty[chat_id] = difficulty
-        await self.groups.update_one(
+        await self.groupsdb.update_one(
             {"_id": chat_id},
             {"$set": {"difficulty": difficulty, "title": title}},
             upsert=True,
         )
 
     async def register_group(self, group: Group) -> None:
-        await self.groups.update_one(
-            {"_id": group.chat_id},
-            {"$setOnInsert": group.to_doc()},
-            upsert=True,
-        )
+        if group.chat_id not in self.chats:
+            self.chats.append(group.chat_id)
+            await self.groupsdb.update_one(
+                {"_id": group.chat_id},
+                {"$setOnInsert": group.to_doc()},
+                upsert=True,
+            )
+
+    async def remove_group(self, chat_id: int) -> None:
+        if chat_id in self.chats:
+            self.chats.remove(chat_id)
+        await self.groupsdb.delete_one({"_id": chat_id})
+        if chat_id in self.lang:
+            del self.lang[chat_id]
 
     async def get_chat_lang(self, chat_id: int) -> str:
-        if chat_id > 0:
-            doc = await self.users.find_one({"_id": chat_id})
-        else:
-            doc = await self.groups.find_one({"_id": chat_id})
-        return doc.get("lang", config.DEFAULT_LANG) if doc else config.DEFAULT_LANG
+        return self.lang.get(chat_id, config.DEFAULT_LANG)
 
     async def set_chat_lang(self, chat_id: int, lang: str) -> None:
+        self.lang[chat_id] = lang
         if chat_id > 0:
-            await self.users.update_one({"_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
+            await self.usersdb.update_one({"_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
         else:
-            await self.groups.update_one({"_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
+            await self.groupsdb.update_one({"_id": chat_id}, {"$set": {"lang": lang}}, upsert=True)
 
 
     async def register_user(self, user: User) -> None:
-        await self.users.update_one(
-            {"_id": user.user_id},
-            {"$set": {"first_name": user.first_name, "username": user.username}},
-            upsert=True,
-        )
+        if user.user_id not in self.users:
+            self.users.append(user.user_id)
+            await self.usersdb.update_one(
+                {"_id": user.user_id},
+                {"$set": {"first_name": user.first_name, "username": user.username}},
+                upsert=True,
+            )
 
     async def get_chats(self) -> list[int]:
-        cursor = self.groups.find({})
-        return [doc["_id"] async for doc in cursor]
+        if not self.chats:
+            self.chats.extend([doc["_id"] async for doc in self.groupsdb.find({})])
+        return self.chats
 
     async def get_users(self) -> list[int]:
-        cursor = self.users.find({})
-        return [doc["_id"] async for doc in cursor]
+        if not self.users:
+            self.users.extend([doc["_id"] async for doc in self.usersdb.find({})])
+        return self.users
 
 
     async def get_statistics(self, user_id: int, chat_id: int) -> Statistics:
@@ -238,7 +261,7 @@ class MongoDB:
         return [Statistics.from_doc(doc) async for doc in cursor]
 
     async def get_users_map(self, user_ids: list[int]) -> dict:
-        cursor = self.users.find({"_id": {"$in": user_ids}})
+        cursor = self.usersdb.find({"_id": {"$in": user_ids}})
         return {doc["_id"]: User.from_doc(doc) async for doc in cursor}
 
     async def claim_daily_first_win(self, user_id: int) -> bool:

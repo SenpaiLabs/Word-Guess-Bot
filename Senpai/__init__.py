@@ -1,13 +1,12 @@
-from __future__ import annotations
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from config import config, logger
+from config import config
 
-config.validate()
+config.check()
 
 from Senpai.core.bot import app
 
 scheduler = AsyncIOScheduler()
 
-__all__ = ["app", "scheduler", "config", "logger"]
+__all__ = ["app", "scheduler", "config"]

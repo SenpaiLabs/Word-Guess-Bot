@@ -1,12 +1,11 @@
 
 
-from __future__ import annotations
-
 import logging
 from dataclasses import dataclass, field
 
 from dotenv import load_dotenv
 from os import getenv
+from loguru import logger
 
 load_dotenv()
 
@@ -35,7 +34,6 @@ class Config:
 
 
     MONGO_URL: str = field(default_factory=lambda: getenv("MONGO_URL", ""))
-    MONGO_DB_NAME: str = field(default_factory=lambda: getenv("MONGO_DB_NAME", "WordGuessBot"))
 
 
     MAX_ATTEMPTS: int = field(default_factory=lambda: _int("MAX_ATTEMPTS", 30))
@@ -50,38 +48,45 @@ class Config:
     WORD_GEN_BATCH_SIZE: int = field(default_factory=lambda: _int("WORD_GEN_BATCH_SIZE", 25))
 
 
-    LOG_GROUP_ID: int = field(default_factory=lambda: _int("LOG_GROUP_ID", 0))
-    SUPPORT_CHAT: str = field(default_factory=lambda: getenv("SUPPORT_CHAT", ""))
-    SUPPORT_CHANNEL: str = field(default_factory=lambda: getenv("SUPPORT_CHANNEL", ""))
+    LOGGER_ID: int = field(default_factory=lambda: _int("LOGGER_ID", 0))
+    SUPPORT_CHAT: str = field(default_factory=lambda: getenv("SUPPORT_CHAT", "https://t.me/THE_DRAGON_SUPPORT"))
+    SUPPORT_CHANNEL: str = field(default_factory=lambda: getenv("SUPPORT_CHANNEL", "https://t.me/Senpai_Updates"))
     START_IMG: str = field(default_factory=lambda: getenv("START_IMG", "https://raw.githubusercontent.com/SenpaiLabs/Word-Guess-Bot/main/.github/banner.png"))
     PING_IMG: str = field(default_factory=lambda: getenv("PING_IMG", ""))
 
-    def validate(self) -> None:
-        required = {
-            "API_ID": self.API_ID,
-            "API_HASH": self.API_HASH,
-            "BOT_TOKEN": self.BOT_TOKEN,
-            "MONGO_URL": self.MONGO_URL,
-        }
-        missing = [key for key, value in required.items() if not value]
+    def check(self) -> None:
+        missing = [
+            var
+            for var in ["API_ID", "API_HASH", "BOT_TOKEN", "MONGO_URL", "LOGGER_ID", "OWNER_ID"]
+            if not getattr(self, var)
+        ]
         if missing:
             raise SystemExit(f"Missing required environment variables: {', '.join(missing)}")
 
 
 config = Config()
+config.check()
 
 
-def setup_logging() -> logging.Logger:
-    logging.basicConfig(
-        level=logging.INFO,
-        format="[%(asctime)s - %(levelname)s] - %(name)s: %(message)s",
-        datefmt="%d-%b-%y %H:%M:%S",
-        handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
-    )
+class InterceptHandler(logging.Handler):
+    def emit(self, record):
+        try:
+            level = logger.level(record.levelname).name
+        except ValueError:
+            level = record.levelno
 
-    for noisy in ("pyrogram", "pymongo", "apscheduler"):
-        logging.getLogger(noisy).setLevel(logging.WARNING)
-    return logging.getLogger("word-guess-bot")
+        frame, depth = logging.currentframe(), 2
+        while frame.f_code.co_filename == logging.__file__:
+            frame = frame.f_back
+            depth += 1
 
+        logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
-logger = setup_logging()
+import sys
+logger.remove()
+logger.add(sys.stderr, level="INFO")
+
+logging.basicConfig(handlers=[InterceptHandler()], level=logging.INFO, force=True)
+
+for noisy in ("pyrogram", "pymongo", "apscheduler", "tzlocal", "asyncio"):
+    logging.getLogger(noisy).setLevel(logging.WARNING)

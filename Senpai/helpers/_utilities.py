@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 
 def build_mention(user_id: int, name: str) -> str:

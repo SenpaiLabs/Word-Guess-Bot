@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 import asyncio
 
@@ -7,7 +6,7 @@ from pyrogram.errors import MessageIdInvalid, MessageNotModified
 
 from Senpai.core.mongo import db
 from Senpai.helpers._game_engine import engine
-from Senpai.helpers._board import render_board, render_result
+from Senpai.helpers._board import renderer
 from Senpai import app
 from Senpai.helpers._dataclass import User
 from Senpai.helpers import _stats as stats_service
@@ -69,9 +68,9 @@ async def handle_guess(_, m: types.Message):
 
     pattern, won, game_over = await engine.process_guess(game, guess, m.from_user.id if m.from_user else 0)
 
-    board_text = render_board(game, m.lang)
+    board_text = renderer.render_board(game, m.lang)
     if game_over:
-        board_text += "\n\n" + render_result(game, won, m.lang)
+        board_text += "\n\n" + renderer.render_result(game, won, m.lang)
         if won:
             breakdown = await stats_service.apply_win(game, m.from_user.id)
             board_text += "\n\n" + "\n".join(breakdown.as_lines())

@@ -1,5 +1,4 @@
 
-from __future__ import annotations
 
 from Senpai.core.mongo import db
 from Senpai.helpers._dataclass import Game, Statistics

@@ -1,5 +1,4 @@
 
-from __future__ import annotations
 
 import asyncio
 import random
@@ -7,9 +6,9 @@ from time import time
 
 from config import config
 from Senpai.core.mongo import db
-from Senpai.helpers._evaluator import evaluate_guess, is_winning_pattern
+from Senpai.helpers._evaluator import evaluator
 from Senpai.helpers._dataclass import Game, GuessResult
-from Senpai.helpers._word_generator import maybe_replenish
+from Senpai.helpers._word_generator import word_gen
 
 
 class GameAlreadyRunning(Exception):
@@ -49,14 +48,14 @@ class GameEngine:
         )
         await db.save_game(game)
 
-        asyncio.create_task(maybe_replenish(chat_id, length, difficulty))
+        asyncio.create_task(word_gen.maybe_replenish(chat_id, length, difficulty))
 
         return game
 
     async def process_guess(self, game: Game, guess: str, user_id: int) -> tuple[str, bool, bool]:
         guess = guess.strip().lower()
-        pattern = evaluate_guess(guess, game.word)
-        won = is_winning_pattern(pattern, game.length)
+        pattern = evaluator.evaluate_guess(guess, game.word)
+        won = evaluator.is_winning_pattern(pattern, game.length)
 
         game.guesses.append(GuessResult(guess=guess, pattern=pattern, user_id=user_id))
 

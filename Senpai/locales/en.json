@@ -39,9 +39,19 @@
     "userprofile_fastest_none": "—",
     "userprofile_global_heading": "<u><b>Global Stats</b></u>",
     "userprofile_group_heading": "<u><b>Stats in {chat_title}</b></u>",
-    "channel": "Support Channel",
+    "channel": "Channel",
     "help": "Help",
     "language": "Language",
     "source": "Source",
-    "support": "Support"
+    "support": "Support",
+    "help_menu": "<u><b>Help Menu</b></u>\n\nSelect a category below to see detailed help.",
+    "help_game": "Game",
+    "help_stats": "Stats",
+    "help_admin": "Admin",
+    "help_back": "Back",
+    "help_close": "Close",
+    "help_text_game": "<u><b>Game Commands</b></u>\n\n/new - Start a random length game\n/new4, /new5, /new6 - Start a game with specific length\n/guess [word] - Guess a word\n/game - Current game info\n/end - End the current game",
+    "help_text_stats": "<u><b>Stats Commands</b></u>\n\n/profile - View your personal stats\n/leaderboard - View the group leaderboard\n/stats - View bot system stats",
+    "help_text_admin": "<u><b>Admin Commands</b></u>\n\n/setmode [normal|medium|hard] - Change difficulty\n/lang - Change group language\n/broadcast - Broadcast a message (Sudo only)",
+    "log_left_chat": "❌ **Bot Removed From Group!**\n\n**Chat:** {chat_title} (`{chat_id}`)\n**Removed By:** {user_mention} (`{user_id}`)"
 }
