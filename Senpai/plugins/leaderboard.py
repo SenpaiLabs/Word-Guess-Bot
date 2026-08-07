@@ -17,10 +17,10 @@ def _rank_prefix(pos: int) -> str:
     return RANK_EMOJI.get(pos, f"{pos}.")
 
 
-async def _render_leaderboard(chat_id: int, title: str) -> str:
+async def _render_leaderboard(chat_id: int, title: str, lang_dict: dict) -> str:
     top = await db.top_statistics(chat_id, limit=10)
     if not top:
-        return m.lang.get("leaderboard_no_games", "leaderboard_no_games").format(title=title)
+        return lang_dict.get("leaderboard_no_games", "leaderboard_no_games").format(title=title)
 
     users = await db.get_users_map([s.user_id for s in top])
 
@@ -45,7 +45,7 @@ async def _render_leaderboard(chat_id: int, title: str) -> str:
 @lang.language()
 async def group_leaderboard(_, m: types.Message):
     title = m.lang.get("leaderboard_group_title", "leaderboard_group_title").format(chat_title=m.chat.title)
-    text = await _render_leaderboard(m.chat.id, title)
+    text = await _render_leaderboard(m.chat.id, title, m.lang)
     await m.reply_text(text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 
@@ -53,5 +53,5 @@ async def group_leaderboard(_, m: types.Message):
 @lang.language()
 async def global_leaderboard(_, m: types.Message):
     title = m.lang.get("leaderboard_global_title", "leaderboard_global_title")
-    text = await _render_leaderboard(GLOBAL_SCOPE, title)
+    text = await _render_leaderboard(GLOBAL_SCOPE, title, m.lang)
     await m.reply_text(text, parse_mode=ParseMode.HTML, disable_web_page_preview=True)

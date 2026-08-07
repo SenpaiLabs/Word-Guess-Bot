@@ -5,7 +5,6 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from config import config
 
 
-
 def get_support_markup(lang_dict: dict) -> InlineKeyboardMarkup | None:
     if config.SUPPORT_CHAT:
         return InlineKeyboardMarkup([
