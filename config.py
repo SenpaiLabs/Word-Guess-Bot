@@ -52,7 +52,7 @@ class Config:
     SUPPORT_CHAT: str = field(default_factory=lambda: getenv("SUPPORT_CHAT", "https://t.me/THE_DRAGON_SUPPORT"))
     SUPPORT_CHANNEL: str = field(default_factory=lambda: getenv("SUPPORT_CHANNEL", "https://t.me/Senpai_Updates"))
     START_IMG: str = field(default_factory=lambda: getenv("START_IMG", "https://raw.githubusercontent.com/SenpaiLabs/Word-Guess-Bot/main/.github/banner.png"))
-    PING_IMG: str = field(default_factory=lambda: getenv("PING_IMG", ""))
+    PING_IMG: str = field(default_factory=lambda: getenv("PING_IMG", "https://ibb.co/bSJkc5T"))
 
     def check(self) -> None:
         missing = [
