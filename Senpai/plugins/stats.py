@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 import os
 import platform
@@ -11,7 +10,7 @@ import pyrogram
 from Senpai import app
 from Senpai.core.lang import lang
 from Senpai.core.mongo import db
-from Senpai.helpers._inline import get_support_markup
+from Senpai.helpers._inline import inline
 from config import config
 
 @app.on_message(filters.command("stats"))
@@ -26,8 +25,8 @@ async def stats_cmd(_, m: types.Message):
         reply = await m.reply_text("Fetching stats...")
         
     sudos = 1 if config.OWNER_ID else 0
-    chats = await db.groups.count_documents({})
-    users = await db.users.count_documents({})
+    chats = await db.groupsdb.count_documents({})
+    users = await db.usersdb.count_documents({})
     
     modules = 0
     try:
@@ -69,7 +68,7 @@ async def stats_cmd(_, m: types.Message):
         pyrogram_version=pyrogram_version
     )
     
-    reply_markup = get_support_markup(m.lang)
+    reply_markup = inline.support_markup(m.lang)
     
     if config.PING_IMG:
         await reply.edit_caption(caption=text, reply_markup=reply_markup)

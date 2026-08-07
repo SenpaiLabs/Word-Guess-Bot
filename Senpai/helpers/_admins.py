@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 from pyrogram import enums, filters, types
 from pyrogram.enums import ChatMemberStatus

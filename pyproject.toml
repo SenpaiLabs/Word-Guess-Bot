@@ -17,7 +17,7 @@ dependencies = [
     "pyrogram>=2.0.106",
     "python-dotenv>=1.2.2",
     "psutil>=6.0.0",
-    "tgcrypto>=1.2.5",
+    "tgcrypto>=1.2.5; sys_platform != 'win32'",
 ]
 
 

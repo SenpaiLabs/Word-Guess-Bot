@@ -497,7 +497,7 @@ dependencies = [
     { name = "pymongo" },
     { name = "pyrogram" },
     { name = "python-dotenv" },
-    { name = "tgcrypto" },
+    { name = "tgcrypto", marker = "sys_platform != 'win32'" },
 ]
 
 [package.metadata]
@@ -511,5 +511,5 @@ requires-dist = [
     { name = "pymongo", specifier = ">=4.17.0" },
     { name = "pyrogram", specifier = ">=2.0.106" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
-    { name = "tgcrypto", specifier = ">=1.2.5" },
+    { name = "tgcrypto", marker = "sys_platform != 'win32'", specifier = ">=1.2.5" },
 ]

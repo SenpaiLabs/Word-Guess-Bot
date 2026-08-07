@@ -1,23 +1,16 @@
-from pyrogram import filters, types
+from pyrogram import filters, types, enums
 
 from Senpai import app
 from Senpai.core.lang import lang
 from Senpai.core.mongo import db
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-
-def lang_markup(current_lang: str):
-    languages = lang.get_languages()
-    buttons = []
-    for lang_code, lang_name in languages.items():
-        text = f"{lang_name} {'✅' if current_lang == lang_code else ''}"
-        buttons.append([InlineKeyboardButton(text, callback_data=f"language {lang_code}")])
-    return InlineKeyboardMarkup(buttons)
+from Senpai.helpers._inline import inline
 
 @app.on_message(filters.command(["lang", "language"]))
 @lang.language()
 async def _lang_cmd(_, m: types.Message):
     current = await db.get_chat_lang(m.chat.id)
-    keyboard = lang_markup(current)
+    keyboard = inline.lang_markup(current)
     await m.reply_text(m.lang.get("lang_choose", "Please select your preferred language:"), reply_markup=keyboard)
 
 
@@ -31,13 +24,13 @@ async def _lang_cb(_, query: types.CallbackQuery):
         # Check if user is admin in group
         user_id = query.from_user.id
         member = await app.get_chat_member(chat_id, user_id)
-        if member.status not in (types.enums.ChatMemberStatus.ADMINISTRATOR, types.enums.ChatMemberStatus.OWNER):
+        if member.status not in (enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER):
             await query.answer(query.lang.get("lang_admin_only", "Only admins can change the group language!"), show_alert=True)
             return
 
     if data[0] in ["language", "lang"] and len(data) == 1:
         current = await db.get_chat_lang(chat_id)
-        keyboard = lang_markup(current)
+        keyboard = inline.lang_markup(current)
         return await query.edit_message_text(
             query.lang.get("lang_choose", "Please select your preferred language:"), reply_markup=keyboard
         )

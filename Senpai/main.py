@@ -1,31 +1,27 @@
-from __future__ import annotations
 
 import asyncio
 import importlib
-import logging
+import signal
 
-from Senpai import app, scheduler, logger
+from loguru import logger
+
+from Senpai import app, scheduler
 from Senpai.core.mongo import db
 
-_PLUGINS = [
-    "Senpai.plugins.start",
-    "Senpai.plugins.game",
-    "Senpai.plugins.guess",
-    "Senpai.plugins.leaderboard",
-    "Senpai.plugins.userprofile",
-    "Senpai.plugins.ping",
-    "Senpai.plugins.stats",
-]
+from Senpai.plugins import all_modules
 
 
 async def main() -> None:
+    logger.add("log.txt", level="INFO")
     await db.connect()
     
-    for plugin in _PLUGINS:
+    for module in all_modules:
         try:
-            importlib.import_module(plugin)
+            importlib.import_module(f"Senpai.plugins.{module}")
         except Exception:
-            logger.exception(f"Failed to load plugin {plugin}")
+            logger.exception(f"Failed to load plugin {module}")
+            
+    logger.info(f"Loaded {len(all_modules)} modules.")
 
     await app.start()
 
@@ -33,16 +29,21 @@ async def main() -> None:
 
     me = await app.get_me()
     logger.info(f"Senpai started as @{me.username}")
+    
+    from config import config
+    if config.LOGGER_ID:
+        try:
+            await app.send_message(config.LOGGER_ID, f"✅ Bot started as @{me.username}")
+        except Exception:
+            pass
 
     stop_event = asyncio.Event()
     loop = asyncio.get_running_loop()
-    import signal
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, stop_event.set)
 
     await stop_event.wait()
-
-    logging.getLogger("asyncio").setLevel(logging.CRITICAL)
+    logger.info("Stopping...")
 
     scheduler.shutdown(wait=False)
     try:

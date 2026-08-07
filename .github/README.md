@@ -62,7 +62,7 @@ export PATH="$HOME/.local/bin:$PATH"
 irm https://astral.sh/uv/install.ps1 | iex
 
 # Install dependencies
-uv sync
+uv sync --frozen
 
 # Rename and configure environment variables
 cp .env.example .env

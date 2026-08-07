@@ -1,5 +1,4 @@
 
-from __future__ import annotations
 
 from Senpai.helpers._dataclass import Statistics
 
