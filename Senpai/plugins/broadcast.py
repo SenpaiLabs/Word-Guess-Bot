@@ -1,5 +1,6 @@
 import os
 import asyncio
+from loguru import logger
 
 from pyrogram import errors, filters, types
 
@@ -63,7 +64,7 @@ async def _broadcast(_, message: types.Message):
         )
         try: 
             os.remove("errors.txt")
-        except Exception: 
-            pass
+        except Exception as e: 
+            logger.debug(f"Failed to remove errors.txt: {e}")
 
     await sent.edit_text(text)

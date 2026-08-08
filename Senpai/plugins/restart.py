@@ -36,7 +36,7 @@ async def _restart(_, m: types.Message):
     
     try: 
         os.remove("log.txt")
-    except Exception: 
-        pass
+    except Exception as e: 
+        logger.debug(f"Failed to remove log.txt: {e}")
 
-    os.execl(sys.executable, sys.executable, "-m", "Senpai")
+    os.execl(sys.executable, sys.executable, "-m", "Senpai.main")

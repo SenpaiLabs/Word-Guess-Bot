@@ -6,6 +6,7 @@ import sys
 import psutil
 from pyrogram import filters, types
 import pyrogram
+from loguru import logger
 
 from Senpai import app
 from Senpai.core.lang import lang
@@ -31,8 +32,8 @@ async def stats_cmd(_, m: types.Message):
     modules = 0
     try:
         modules = len([f for f in os.listdir("Senpai/plugins") if f.endswith(".py") and not f.startswith("__")])
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Failed to count modules: {e}")
     
     plat = platform.system()
     
