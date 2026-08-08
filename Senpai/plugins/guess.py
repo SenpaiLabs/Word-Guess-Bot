@@ -41,12 +41,6 @@ async def handle_guess(_, m: types.Message):
     if not engine.is_guess_shape_valid(guess, game.length):
         return
 
-    # Delete the user's guess message immediately
-    try:
-        await m.delete()
-    except Exception as e:
-        logger.debug(f"Failed to delete guess message: {e}")
-
     # Check if already guessed
     if any(g.guess == guess for g in game.guesses):
         msg_text = m.lang.get("guess_already_guessed", "guess_already_guessed").format(guess=guess.upper())
@@ -69,12 +63,13 @@ async def handle_guess(_, m: types.Message):
     pattern, won, game_over = await engine.process_guess(game, guess, m.from_user.id if m.from_user else 0)
 
     board_text = renderer.render_board(game, m.lang)
+    result_text = None
     if game_over:
-        board_text += "\n\n" + renderer.render_result(game, won, m.lang)
+        result_text = renderer.render_result(game, won, m.lang)
         if won:
             breakdown = await stats_service.apply_win(game, m.from_user.id)
-            board_text += "\n\n" + "\n".join(breakdown.as_lines())
-            board_text += m.lang.get("points_total", "points_total").format(total=breakdown.total)
+            result_text += "\n\n" + "\n".join(breakdown.as_lines())
+            result_text += m.lang.get("points_total", "points_total").format(total=breakdown.total)
         else:
             await stats_service.apply_loss(game)
 
@@ -84,5 +79,8 @@ async def handle_guess(_, m: types.Message):
     
     if game_over:
         await db.finish_game(game)
+        if result_text:
+            # Send the congratulation/result message separately, replying to the winning guess
+            await app.send_message(chat_id=m.chat.id, text=result_text, reply_to_message_id=m.id)
     else:
         await db.save_game(game)
