@@ -44,9 +44,8 @@ async def _lang_cb(_, query: types.CallbackQuery):
 
     await db.set_chat_lang(chat_id, _lang_code)
     
-    # Reload string in new language by fetching manually for the confirmation message
     lang_dict = lang.languages.get(_lang_code, lang.languages["en"])
     success_text = lang_dict.get("lang_changed", "✅ Language successfully set to **{}** for this chat.").format(_lang_code.upper())
     
-    await query.answer(f"Language changed to {_lang_code.upper()}", show_alert=True)
+    await query.answer(lang_dict.get("lang_changed_alert", "Language changed to {}").format(_lang_code.upper()), show_alert=True)
     await query.edit_message_text(success_text)

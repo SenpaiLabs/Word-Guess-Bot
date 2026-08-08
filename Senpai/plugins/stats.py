@@ -20,10 +20,10 @@ async def stats_cmd(_, m: types.Message):
     if config.PING_IMG:
         reply = await m.reply_photo(
             photo=config.PING_IMG,
-            caption="Fetching stats..."
+            caption=m.lang.get("stats_fetch", "Fetching stats...")
         )
     else:
-        reply = await m.reply_text("Fetching stats...")
+        reply = await m.reply_text(m.lang.get("stats_fetch", "Fetching stats..."))
         
     sudos = len(app.sudoers)
     chats = await db.groupsdb.count_documents({})

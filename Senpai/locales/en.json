@@ -66,5 +66,7 @@
     "restarted": "Restarted Successfully! Wait for it to boot back up.",
     "log_fetch": "Fetching logs...",
     "log_not_found": "Log file not found!",
-    "log_sent": "Here are the logs for {}"
+    "log_sent": "Here are the logs for {}",
+    "stats_fetch": "Fetching stats...",
+    "lang_changed_alert": "Language changed to {}"
 }
