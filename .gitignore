@@ -7,3 +7,5 @@ log.txt
 .venv/
 venv/
 *.egg-info/
+
+.agents/
