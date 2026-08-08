@@ -32,18 +32,18 @@ class Inline:
         if back:
             rows = [
                 [
-                    types.InlineKeyboardButton(text=_lang.get("help_back", "Back"), callback_data="help back"),
-                    types.InlineKeyboardButton(text=_lang.get("help_close", "Close"), callback_data="help close"),
+                    types.InlineKeyboardButton(text=_lang.get("help_back", "Back"), callback_data="help back", style="primary"),
+                    types.InlineKeyboardButton(text=_lang.get("help_close", "Close"), callback_data="help close", style="danger"),
                 ]
             ]
         else:
             cbs = ["game", "stats", "admin"]
             buttons = [
-                types.InlineKeyboardButton(text=_lang.get(f"help_{cb}", cb.capitalize()), callback_data=f"help {cb}")
+                types.InlineKeyboardButton(text=_lang.get(f"help_{cb}", cb.capitalize()), callback_data=f"help {cb}", style="primary")
                 for cb in cbs
             ]
             rows = [buttons[i : i + 3] for i in range(0, len(buttons), 3)]
-            rows.append([types.InlineKeyboardButton(text=_lang.get("help_close", "Close"), callback_data="help close")])
+            rows.append([types.InlineKeyboardButton(text=_lang.get("help_close", "Close"), callback_data="help close", style="danger")])
 
         return types.InlineKeyboardMarkup(rows)
 
@@ -54,19 +54,20 @@ class Inline:
                 types.InlineKeyboardButton(
                     text=_lang.get("add_me", "Add Me to Group"),
                     url=f"https://t.me/{bot_username}?startgroup=true",
+                    style="success"
                 )
             ],
         ]
 
         if private:
             rows.append([
-                types.InlineKeyboardButton(text=_lang.get("help", "Help"), callback_data="help"),
+                types.InlineKeyboardButton(text=_lang.get("help", "Help"), callback_data="help", style="primary"),
                 types.InlineKeyboardButton(text=_lang.get("source", "Source Code"), url="https://github.com/SenpaiLabs/Word-Guess-Bot"),
             ])
         else:
             rows.append([
-                types.InlineKeyboardButton(text=_lang.get("help", "Help"), url=f"https://t.me/{bot_username}?start=help"),
-                types.InlineKeyboardButton(text=_lang.get("language", "Language"), callback_data="lang"),
+                types.InlineKeyboardButton(text=_lang.get("help", "Help"), url=f"https://t.me/{bot_username}?start=help", style="primary"),
+                types.InlineKeyboardButton(text=_lang.get("language", "Language"), callback_data="lang", style="primary"),
             ])
 
         row3 = []
