@@ -86,8 +86,8 @@ class MongoDB:
             try:
                 result = await self.words.insert_many(docs, ordered=False)
                 total += len(result.inserted_ids)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Some words were skipped during import (likely duplicates): {e}")
 
         await self.cache.update_one(
             {"_id": "words_imported"}, {"$set": {"count": total}}, upsert=True
@@ -152,7 +152,8 @@ class MongoDB:
         try:
             result = await self.words.insert_many(docs, ordered=False)
             return len(result.inserted_ids)
-        except Exception:
+        except Exception as e:
+            logger.debug(f"Failed to insert some generated words: {e}")
             return 0
 
     async def remaining_word_count(self, chat_id: int, length: int, difficulty: str) -> int:

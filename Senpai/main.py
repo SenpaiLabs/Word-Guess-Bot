@@ -34,8 +34,8 @@ async def main() -> None:
     if config.LOGGER_ID:
         try:
             await app.send_message(config.LOGGER_ID, f"✅ Bot started as @{me.username}")
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Failed to send startup message: {e}")
 
     stop_event = asyncio.Event()
     loop = asyncio.get_running_loop()
@@ -48,8 +48,8 @@ async def main() -> None:
     scheduler.shutdown(wait=False)
     try:
         await app.stop()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Failed to stop app gracefully: {e}")
     await db.close()
 
 

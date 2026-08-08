@@ -1,5 +1,6 @@
 
 import asyncio
+from loguru import logger
 
 from pyrogram import filters, types
 from pyrogram.errors import MessageIdInvalid, MessageNotModified
@@ -17,8 +18,8 @@ async def delete_temp_message(message: types.Message, delay: int = 3):
     await asyncio.sleep(delay)
     try:
         await message.delete()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Failed to delete temp message: {e}")
 
 
 def _looks_like_guess(_, __, m: types.Message) -> bool:
@@ -44,8 +45,8 @@ async def handle_guess(_, m: types.Message):
     # Delete the user's guess message immediately
     try:
         await m.delete()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Failed to delete guess message: {e}")
 
     # Check if already guessed
     if any(g.guess == guess for g in game.guesses):

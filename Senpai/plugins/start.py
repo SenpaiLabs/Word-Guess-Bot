@@ -1,5 +1,6 @@
 
 from pyrogram import filters, types, enums
+from loguru import logger
 
 from Senpai.core.mongo import db
 from Senpai import app
@@ -30,14 +31,14 @@ async def help_callback(_, query: types.CallbackQuery):
                 await app.send_message(query.message.chat.id, text, reply_markup=reply_markup)
             else:
                 await query.edit_message_text(text, reply_markup=reply_markup)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Failed to edit/send help message: {e}")
         
     elif data[1] == "close":
         try:
             await query.message.delete()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Failed to delete help message: {e}")
         
     else:
         category = data[1]
@@ -51,8 +52,8 @@ async def help_callback(_, query: types.CallbackQuery):
                 await app.send_message(query.message.chat.id, text, reply_markup=reply_markup)
             else:
                 await query.edit_message_text(text, reply_markup=reply_markup)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Failed to edit/send category help message: {e}")
 
 
 @app.on_message(filters.command("start"))
@@ -74,8 +75,8 @@ async def start_cmd(_, m: types.Message):
                     config.LOGGER_ID, 
                     log_text
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Failed to send new user log: {e}")
 
     me = await app.get_me()
     
@@ -121,8 +122,8 @@ async def on_new_chat_members(_, m: types.Message):
                     config.LOGGER_ID, 
                     log_text
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Failed to send new chat log: {e}")
 
 
 @app.on_message(filters.left_chat_member)
@@ -147,5 +148,5 @@ async def on_left_chat_member(_, m: types.Message):
                     config.LOGGER_ID, 
                     log_text
                 )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Failed to send left chat log: {e}")
