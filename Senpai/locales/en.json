@@ -61,5 +61,10 @@
     "sudo_removed": "Removed {} from sudo users.",
     "sudo_fetching": "Fetching sudo users...",
     "sudo_owner": "👑 **Owner**\n- {}",
-    "sudo_users": "⚡ **Sudo Users**"
+    "sudo_users": "⚡ **Sudo Users**",
+    "restarting": "Restarting...",
+    "restarted": "Restarted Successfully! Wait for it to boot back up.",
+    "log_fetch": "Fetching logs...",
+    "log_not_found": "Log file not found!",
+    "log_sent": "Here are the logs for {}"
 }
