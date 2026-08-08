@@ -3,7 +3,6 @@ import asyncio
 from loguru import logger
 
 from pyrogram import filters, types
-from pyrogram.errors import MessageIdInvalid, MessageNotModified
 
 from Senpai.core.mongo import db
 from Senpai.helpers._game_engine import engine

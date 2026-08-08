@@ -4,7 +4,6 @@ import shutil
 
 from pyrogram import filters, types
 from loguru import logger
-from config import config
 
 from Senpai import app
 from Senpai.core.lang import lang

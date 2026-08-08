@@ -3,7 +3,6 @@ from pyrogram import filters, types, enums
 from Senpai import app
 from Senpai.core.lang import lang
 from Senpai.core.mongo import db
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from Senpai.helpers._inline import inline
 
 @app.on_message(filters.command(["lang", "language"]))

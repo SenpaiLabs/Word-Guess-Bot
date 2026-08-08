@@ -1,6 +1,5 @@
 import json
 from functools import wraps
-from pathlib import Path
 
 from pyrogram import errors
 

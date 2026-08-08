@@ -8,7 +8,6 @@ from Senpai import app
 from Senpai.core.lang import lang
 from Senpai.core.mongo import db
 from Senpai.helpers._sudo import sudo_filter
-from config import config
 
 broadcasting = asyncio.Lock()
 
