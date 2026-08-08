@@ -14,7 +14,7 @@ dependencies = [
     "motor>=3.7.1",
     "openai>=2.53.0",
     "pymongo>=4.17.0",
-    "pyrogram>=2.0.106",
+    "kurigram>=2.2.24",
     "python-dotenv>=1.2.2",
     "psutil>=6.0.0",
     "tgcrypto>=1.2.5; sys_platform != 'win32'",
