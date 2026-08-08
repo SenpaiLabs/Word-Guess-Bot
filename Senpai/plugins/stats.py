@@ -12,9 +12,10 @@ from Senpai import app
 from Senpai.core.lang import lang
 from Senpai.core.mongo import db
 from Senpai.helpers._inline import inline
+from Senpai.helpers._sudo import sudo_filter
 from config import config
 
-@app.on_message(filters.command("stats"))
+@app.on_message(filters.command("stats") & sudo_filter)
 @lang.language()
 async def stats_cmd(_, m: types.Message):
     if config.PING_IMG:
