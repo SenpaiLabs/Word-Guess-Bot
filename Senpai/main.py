@@ -15,6 +15,11 @@ async def main() -> None:
     logger.add("log.txt", level="INFO")
     await db.connect()
     
+    app.sudoers = set(await db.get_sudoers())
+    from config import config
+    if config.OWNER_ID:
+        app.sudoers.add(config.OWNER_ID)
+    
     for module in all_modules:
         try:
             importlib.import_module(f"Senpai.plugins.{module}")

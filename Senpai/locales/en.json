@@ -53,5 +53,13 @@
     "help_text_game": "<u><b>Game Commands</b></u>\n\n/new - Start a random length game\n/new4, /new5, /new6 - Start a game with specific length\n/guess [word] - Guess a word\n/game - Current game info\n/end - End the current game",
     "help_text_stats": "<u><b>Stats Commands</b></u>\n\n/profile - View your personal stats\n/leaderboard - View the group leaderboard\n/stats - View bot system stats",
     "help_text_admin": "<u><b>Admin Commands</b></u>\n\n/setmode [normal|medium|hard] - Change difficulty\n/lang - Change group language\n/broadcast - Broadcast a message (Sudo only)",
-    "log_left_chat": "❌ **Bot Removed From Group!**\n\n**Chat:** {chat_title} (`{chat_id}`)\n**Removed By:** {user_mention} (`{user_id}`)"
+    "log_left_chat": "❌ **Bot Removed From Group!**\n\n**Chat:** {chat_title} (`{chat_id}`)\n**Removed By:** {user_mention} (`{user_id}`)",
+    "user_not_found": "User not found.",
+    "sudo_already": "{} is already a sudo user.",
+    "sudo_added": "Added {} to sudo users.",
+    "sudo_not": "{} is not a sudo user or is the owner.",
+    "sudo_removed": "Removed {} from sudo users.",
+    "sudo_fetching": "Fetching sudo users...",
+    "sudo_owner": "👑 **Owner**\n- {}",
+    "sudo_users": "⚡ **Sudo Users**"
 }

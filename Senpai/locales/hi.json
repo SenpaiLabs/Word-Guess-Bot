@@ -53,5 +53,13 @@
     "help_text_game": "<u><b>गेम कमांड्स</b></u>\n\n/new - रैंडम लंबाई का गेम शुरू करें\n/new4, /new5, /new6 - अपनी पसंद की लंबाई का गेम शुरू करें\n/guess [शब्द] - शब्द का अनुमान लगाएं\n/game - मौजूदा गेम की जानकारी\n/end - मौजूदा गेम खत्म करें",
     "help_text_stats": "<u><b>स्टैट्स कमांड्स</b></u>\n\n/profile - अपने पर्सनल स्टैट्स देखें\n/leaderboard - ग्रुप लीडरबोर्ड देखें\n/stats - बॉट के सिस्टम स्टैट्स देखें",
     "help_text_admin": "<u><b>एडमिन कमांड्स</b></u>\n\n/setmode [normal|medium|hard] - कठिनाई बदलें\n/lang - ग्रुप की भाषा बदलें\n/broadcast - मैसेज ब्रॉडकास्ट करें (सिर्फ Sudo के लिए)",
-    "log_left_chat": "❌ **बॉट को ग्रुप से निकाल दिया गया!**\n\n**चैट:** {chat_title} (`{chat_id}`)\n**निकालने वाला:** {user_mention} (`{user_id}`)"
+    "log_left_chat": "❌ **बॉट को ग्रुप से निकाल दिया गया!**\n\n**चैट:** {chat_title} (`{chat_id}`)\n**निकालने वाला:** {user_mention} (`{user_id}`)",
+    "user_not_found": "यूज़र नहीं मिला।",
+    "sudo_already": "{} पहले से ही Sudo यूज़र है।",
+    "sudo_added": "{} को Sudo यूज़र्स में जोड़ दिया गया है।",
+    "sudo_not": "{} Sudo यूज़र नहीं है या फिर ओनर है।",
+    "sudo_removed": "{} को Sudo यूज़र्स से हटा दिया गया है।",
+    "sudo_fetching": "Sudo यूज़र्स की जानकारी ली जा रही है...",
+    "sudo_owner": "👑 **ओनर**\n- {}",
+    "sudo_users": "⚡ **Sudo यूज़र्स**"
 }

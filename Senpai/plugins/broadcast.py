@@ -7,11 +7,12 @@ from pyrogram import errors, filters, types
 from Senpai import app
 from Senpai.core.lang import lang
 from Senpai.core.mongo import db
+from Senpai.helpers._sudo import sudo_filter
 from config import config
 
 broadcasting = asyncio.Lock()
 
-@app.on_message(filters.command(["broadcast"]) & filters.user(config.OWNER_ID))
+@app.on_message(filters.command(["broadcast"]) & sudo_filter)
 @lang.language()
 async def _broadcast(_, message: types.Message):
     if not message.reply_to_message:

@@ -8,9 +8,10 @@ from config import config
 
 from Senpai import app
 from Senpai.core.lang import lang
+from Senpai.helpers._sudo import sudo_filter
 
 
-@app.on_message(filters.command("logs") & filters.user(config.OWNER_ID))
+@app.on_message(filters.command("logs") & sudo_filter)
 @lang.language()
 async def _logs(_, m: types.Message):
     sent = await m.reply_text(m.lang.get("log_fetch", "Fetching logs..."))
@@ -24,7 +25,7 @@ async def _logs(_, m: types.Message):
     )
 
 
-@app.on_message(filters.command("restart") & filters.user(config.OWNER_ID))
+@app.on_message(filters.command("restart") & sudo_filter)
 @lang.language()
 async def _restart(_, m: types.Message):
     sent = await m.reply_text(m.lang.get("restarting", "Restarting..."))

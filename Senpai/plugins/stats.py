@@ -25,7 +25,7 @@ async def stats_cmd(_, m: types.Message):
     else:
         reply = await m.reply_text("Fetching stats...")
         
-    sudos = 1 if config.OWNER_ID else 0
+    sudos = len(app.sudoers)
     chats = await db.groupsdb.count_documents({})
     users = await db.usersdb.count_documents({})
     

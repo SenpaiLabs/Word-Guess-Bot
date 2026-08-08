@@ -23,6 +23,7 @@ class MongoDB:
         self.leaderboards = self.db.leaderboards
         self.statistics = self.db.statistics
         self.cache = self.db.cache
+        self.sudoersdb = self.db.sudoers
 
         self.chats = []
         self.users = []
@@ -276,5 +277,18 @@ class MongoDB:
         )
         return result.upserted_id is not None
 
+
+    async def add_sudo(self, user_id: int) -> None:
+        await self.sudoersdb.update_one(
+            {"_id": user_id},
+            {"$set": {"_id": user_id}},
+            upsert=True
+        )
+
+    async def del_sudo(self, user_id: int) -> None:
+        await self.sudoersdb.delete_one({"_id": user_id})
+
+    async def get_sudoers(self) -> list[int]:
+        return [doc["_id"] async for doc in self.sudoersdb.find({})]
 
 db = MongoDB()
